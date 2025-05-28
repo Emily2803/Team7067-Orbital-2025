@@ -1,5 +1,5 @@
 # ShelfAware -- Team 7067 👋
-Level of Achievemnt -- Apollo 11
+Level of Achievement -- Apollo 11
 
 ## Project Scope
 
