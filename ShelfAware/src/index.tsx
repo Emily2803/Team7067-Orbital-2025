@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import Content from './Content';
 import Footer from './Footer';
+import Home from './Home';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
@@ -13,7 +14,7 @@ root.render(
   <React.StrictMode>
     <App />
     <Content/>
-    <Footer />
+    <Home />
 
   </React.StrictMode>
 );

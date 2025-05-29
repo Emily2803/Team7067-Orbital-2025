@@ -1,0 +1,84 @@
+.home {
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  background-color: #fffefc;
+  padding: 2rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: #e6f4ea;
+  border-radius: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 3rem;
+  color: #388e3c;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.highlight {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  background-color: #66bb6a;
+  color: white;
+  padding: 0.8rem 1.8rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #558b2f;
+}
+
+.features {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.features h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #2e7d32;
+}
+
+.feature-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.feature-card {
+  background-color: #f7fdf8;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.feature-card strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #33691e;
+}
+
+.feature-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+}
