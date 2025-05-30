@@ -19,7 +19,7 @@ function UserSignUp() {
             console.log("User signed up:", userCredential.user);
             alert("Signed up!");
             setTimeout(() => {
-                navigate("/");
+                navigate("/home");
             }, 100);
         } catch (error: any) {
             console.error("Signup error:", error.message);
