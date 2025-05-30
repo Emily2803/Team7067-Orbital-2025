@@ -18,14 +18,16 @@
 
 nav {
   display: flex;
-  gap: 1rem; 
+  gap: 1rem;
+  margin-top: 0rem;
 }
 
 .authen {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 0rem;
+  padding-left: 0rem;
+  padding-right: 1rem;
   width: 100%;
 }
 
