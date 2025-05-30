@@ -1,13 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './CSS/Home.css';
+import { auth } from './firebase';
+import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
+import UserLogout from './CSS/Authentication/logout';
 
 const Home: React.FC = () => {
-  return (
-    <>
+  const [userName, setUserName] = useState<string | null>(null);
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      setUserName(user.displayName || 'User');
+    } else {
+      navigate('/login'); // redirect if not logged in
+    }
+  }, [navigate]);
+
+  return (
     <div className="home">
       <section className="hero">
+        <div className="home-header">
+          <h2 className="welcome">👋 Welcome Back, {userName}!</h2>
+          <UserLogout />
+        </div>
+
         <h1 className="title">ShelfAware 🍅</h1>
         <p className="subtitle">
           A playful twist on being "self-aware" — but for your pantry.
@@ -41,10 +59,9 @@ const Home: React.FC = () => {
       </section>
       <Footer />
     </div>
-
-    </>
   );
 };
 
 export default Home;
+
 

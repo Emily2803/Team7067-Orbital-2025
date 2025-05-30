@@ -1,19 +1,25 @@
 import { auth } from "../../firebase";
 import { signOut } from "firebase/auth";
-import './Auth.css'
+import { useNavigate } from "react-router-dom";
+import './Auth.css';
 
 function UserLogout() {
-    const handleLogout = async () => {
-        try {
-            await signOut(auth);
-            const userAcc = auth.currentUser;
-            alert('Logged out!')
-            } catch (error:any) {
-                console.log(error.message);
-            }
-        };
-        return (<button onClick = {handleLogout}>Log Out</button>
-        );
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/'); 
+    } catch (error: any) {
+      console.error('Logout error:', error.message);
+    }
+  };
+
+  return (
+    <button className="logout-btn" onClick={handleLogout}>
+      Logout
+    </button>
+  );
 }
 
 export default UserLogout;

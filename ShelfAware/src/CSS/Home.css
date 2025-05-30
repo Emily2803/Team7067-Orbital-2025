@@ -82,3 +82,31 @@
   font-size: 0.95rem;
   color: #555;
 }
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.welcome {
+  font-size: 1.2rem;
+  color: #2e7d32;
+}
+
+.logout-btn {
+  background-color: transparent;
+  color: #d32f2f;
+  border: 2px solid #d32f2f;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #d32f2f;
+  color: white;
+}

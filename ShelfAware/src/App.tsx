@@ -3,7 +3,6 @@ import './CSS/App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import UserSignUp from "./CSS/Authentication/signup";
 import UserLogin from "./CSS/Authentication/login"; 
-import UserLogout from "./CSS/Authentication/logout";
 import Home from './Home';
 import Landing from './Landing';
 
