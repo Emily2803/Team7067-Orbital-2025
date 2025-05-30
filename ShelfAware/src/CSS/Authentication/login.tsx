@@ -1,54 +1,46 @@
-import { auth } from "../../firebase";
-import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import './Auth.css'
+import React, { useState } from 'react';
+import { auth } from '../../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import './Auth.css';
 
 function UserLogin() {
-    const navigate = useNavigate();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            alert('Logged in!')
-        } catch (error:any) {
-            console.log(error.message);
-        }
-    };
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate('/home'); 
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
 
-    return(
-        <div className="authPopUp">
-          <form onSubmit={handleLogin}>
-          <button
-           className = "closePopUp"
-           type = "button"
-           onClick = {() => navigate("/")}
-           >
-            x
-           </button>
-            <h2>Login</h2>
-            <br/>
-
-            <input 
-             type = "email"
-             placeholder = "Email"
-             onChange={(e) => setEmail(e.target.value)} 
-            />
-            <br/>
-            <input 
-             type = "password"
-             placeholder = "Password"
-             onChange = {(e) => setPassword(e.target.value)} 
-            />
-            <br/>
-
-            <button type = "submit">Log In</button>
-         </form>
-        </div>
-    );
+  return (
+    <div className="authPopUp">
+      <form onSubmit={handleLogin}>
+        <button type="button" className="closePopUp" onClick={() => navigate('/')}>×</button>
+        <h2>Login</h2>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  );
 }
 
 export default UserLogin;
+

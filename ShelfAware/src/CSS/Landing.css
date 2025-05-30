@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap');
+
+.landing-container {
+  height: 100vh;
+  width: 100%;
+  background: url('./pantry.jpg') center/cover no-repeat;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  padding: 2rem;
+}
+
+.landing-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 0;
+}
+
+.landing-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 4rem 3rem;
+  border-radius: 2rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  max-width: 720px;
+  width: 100%;
+  text-align: center;
+  z-index: 1;
+}
+
+.landing-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #2e7d32;
+  margin-bottom: 1.2rem;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 2.5rem;
+}
+
+.landing-buttons {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.landing-buttons button {
+  padding: 0.85rem 2rem;
+  font-size: 1rem;
+  background-color: #66bb6a;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.landing-buttons button:hover {
+  background-color: #388e3c;
+  transform: translateY(-2px);
+}
+
+
+
