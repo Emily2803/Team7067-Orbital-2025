@@ -3,7 +3,29 @@
 
 }
 
-
 .title{
   color: black;
 }
+
+.loginbutton {
+  padding: 0.5rem 1rem;
+  background-color: #388e3c;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+nav {
+  display: flex;
+  gap: 1rem; 
+}
+
+.authen {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  width: 100%;
+}
+
