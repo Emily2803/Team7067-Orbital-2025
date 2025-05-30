@@ -4,7 +4,7 @@ import "./CSS/Footer.css"
 function Footer() {
   return (
     <div className="Footer">
-      <h1 className='title'>Built with 🧡 for students, communities, and fridge space everywhere.</h1>
+      <h1 className='Footer'>Built with 🧡 for students, communities, and fridge space everywhere.</h1>
     </div>
   );
 }
