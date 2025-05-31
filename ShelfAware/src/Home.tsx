@@ -33,7 +33,9 @@ const Home: React.FC = () => {
         <p className="highlight">
           Track your food, reduce waste, and make smarter choices.
         </p>
-        <button className="cta-button">Start Managing</button>
+        <button className="cta-button"
+          onClick = {() => navigate("/pantry")}>
+          Start Managing</button>
       </section>
 
       <section className="features">
