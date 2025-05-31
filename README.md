@@ -47,12 +47,16 @@ The app's interface is built with React functional components, using TypeScript 
 A custom backend has not been developed yet. For now, we’re relying on Firebase's built-in backend services, such as Authentication and (soon) Firestore, which allow us to manage users and data without deploying our own server.
 
 -Firebase Authentication & Firestore:
+
 Authentication: Already in use. It handles secure user login, registration, and session persistence.
 
 Firestore Database: Planned for the next milestone. It will store each user's pantry items, shared food posts, and preferences.
 
 -OCR (Tesseract.js) and Push Notifications:
-These features are not yet started. We plan to:
+
+These features are not yet started. 
+
+We plan to:
 Use Tesseract.js to extract expiry dates from food packaging images (Milestone 2).
 Implement Firebase Cloud Messaging to send expiry reminders to users' devices (Milestone 2 or 3).
 
