@@ -14,14 +14,14 @@ function UserLogin() {
         e.preventDefault();
         try {
             await signInWithEmailAndPassword(auth, email, password);
+            alert("Logged in!")
+            navigate("/home");
             const userAcc = auth.currentUser;
             await addDoc(collection(db, "loginRec"), {
                 userID: userAcc?.uid || "",
                 email: userAcc?.email || "",
                 loginTime: serverTimestamp(),
             });
-            alert("Logged in!")
-            navigate("/");
     
         } catch (error:any) {
             console.log(error.message);
