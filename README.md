@@ -35,7 +35,9 @@ We’ve successfully implemented Firebase Authentication, allowing users to secu
 Once logged in, users are redirected to a simple homepage that displays a personalized welcome message. The homepage is designed using React components, with placeholder sections prepared for future modules such as:
 
 -Pantry inventory
+
 -Recipe suggestions
+
 -Food sharing page
 
 ## System Design
