@@ -63,4 +63,8 @@ Use Tesseract.js to extract expiry dates from food packaging images (Milestone 2
 Implement Firebase Cloud Messaging to send expiry reminders to users' devices (Milestone 2 or 3).
 
 
-## Setup Instructions 
+## Setup Instructions
+
+##Work Log
+https://docs.google.com/spreadsheets/d/1uvwY5zJe1rlmYZOSrHvpedEZY3KsdoFmI9sbk8u-dBs/edit?usp=sharing
+
