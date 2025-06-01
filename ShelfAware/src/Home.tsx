@@ -4,6 +4,8 @@ import { auth } from './firebase';
 import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
 import UserLogout from './CSS/Authentication/logout';
+import FoodGif from './CSS/Food.gif';
+import PantryBg from './CSS/pantry.jpg';
 
 const Home: React.FC = () => {
   const [userName, setUserName] = useState<string | null>(null);
@@ -14,28 +16,34 @@ const Home: React.FC = () => {
     if (user) {
       setUserName(user.displayName || 'User');
     } else {
-      navigate('/login'); // redirect if not logged in
+      navigate('/login');
     }
   }, [navigate]);
 
   return (
     <div className="home">
-      <section className="hero">
+      <section className="hero" style={{ backgroundImage: `url(${PantryBg})` }}>
+        <div className="hero-dim" />
+
         <div className="home-header">
           <h2 className="welcome">👋 Welcome Back, {userName}!</h2>
           <UserLogout />
         </div>
 
-        <h1 className="title">ShelfAware 🍅</h1>
+        <div className="title-row">
+          <h1 className="title">ShelfAware</h1>
+          <img src={FoodGif} alt="animated pantry gif" className="title-gif" />
+        </div>
+
         <p className="subtitle">
-          A playful twist on being "self-aware" — but for your pantry.
+          a playful twist on being "self-aware" — but for your pantry ִ ࣪𖤐.ᐟ
         </p>
         <p className="highlight">
           Track your food, reduce waste, and make smarter choices.
         </p>
-        <button className="cta-button"
-          onClick = {() => navigate("/pantry")}>
-          Start Managing</button>
+        <button className="cta-button" onClick={() => navigate("/pantry")}>
+          Start Managing
+        </button>
       </section>
 
       <section className="features">
@@ -65,5 +73,6 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
 
 
