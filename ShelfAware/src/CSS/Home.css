@@ -1,16 +1,60 @@
+
 .home {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Outfit', sans-serif;
   color: #333;
   background-color: #fffefc;
   padding: 2rem;
 }
 
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.welcome {
+  font-size: 1.4rem;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.logout-btn {
+  background-color: transparent;
+  color: #d32f2f;
+  border: 2px solid #d32f2f;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #d32f2f;
+  color: white;
+}
+
 .hero {
   text-align: center;
   padding: 4rem 2rem;
-  background-color: #e6f4ea;
+  background: linear-gradient(to right, #e6f4ea, #f2fbf4);
   border-radius: 1.5rem;
   margin-bottom: 3rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05);
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .title {
@@ -32,47 +76,60 @@
 }
 
 .cta-button {
-  background-color: #66bb6a;
+  background: linear-gradient(to right, #66bb6a, #43a047);
   color: white;
-  padding: 0.8rem 1.8rem;
+  padding: 0.9rem 2.2rem;
   font-size: 1rem;
   border: none;
-  border-radius: 1rem;
+  border-radius: 999px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: 500;
+  box-shadow: 0 8px 20px rgba(102, 187, 106, 0.2);
+  transition: all 0.3s ease;
 }
 
 .cta-button:hover {
-  background-color: #558b2f;
+  background: linear-gradient(to right, #43a047, #2e7d32);
+  transform: scale(1.05);
+  box-shadow: 0 10px 24px rgba(76, 175, 80, 0.25);
 }
 
 .features {
   text-align: center;
-  padding: 2rem 0;
+  padding: 3rem 0;
 }
 
 .features h2 {
   font-size: 2rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   color: #2e7d32;
+  font-weight: 600;
 }
 
 .feature-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 2rem;
 }
 
 .feature-card {
   background-color: #f7fdf8;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 1.8rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
   text-align: left;
+  transition: all 0.25s ease;
+  border: 1px solid #e2f0e8;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05);
 }
 
 .feature-card strong {
   display: block;
+  font-size: 1.1rem;
   margin-bottom: 0.5rem;
   color: #33691e;
 }
@@ -83,30 +140,9 @@
   color: #555;
 }
 
-.home-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
 }
 
-.welcome {
-  font-size: 1.2rem;
-  color: #2e7d32;
-}
-
-.logout-btn {
-  background-color: transparent;
-  color: #d32f2f;
-  border: 2px solid #d32f2f;
-  border-radius: 999px;
-  padding: 0.5rem 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.logout-btn:hover {
-  background-color: #d32f2f;
-  color: white;
-}
