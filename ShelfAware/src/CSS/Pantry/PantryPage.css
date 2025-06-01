@@ -120,6 +120,17 @@ body {
   transition: transform 0.25s ease;
 }
 
+/* Add red tint for expired items */
+.expiredCard {
+  border: 1px solid #d32f2f;
+  background-color: #fff6f6;
+  box-shadow: 0 8px 24px rgba(211, 47, 47, 0.1);
+}
+
+.expiredCard .reminderTag {
+  background-color: #d32f2f;
+}
+
 .pantryCard:hover {
   transform: translateY(-4px);
 }
