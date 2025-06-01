@@ -147,7 +147,7 @@ export default function PantryPage() {
                   <div className="reminderTag">{remindText}</div>
                 )}
                 <div className="cardBody">
-                  <p className="itemName">🍎 {item.name}</p>
+                  <p className="itemName"> 🍓 {item.name}</p>
                   <p className="itemExpiry">📅 Expires on {expiryDate}</p>
                 </div>
               </div>
