@@ -1,75 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap');
+
 .authPopUp {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
+  font-family: 'Outfit', sans-serif;
 }
 
 .authPopUp form {
   position: relative;
-  background: #fff;
-  padding: 2.5rem 2rem;
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 3rem 2.5rem;
+  border-radius: 20px;
   width: 90%;
-  max-width: 380px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.25s ease;
-  font-family: 'Segoe UI', sans-serif;
+  max-width: 420px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  animation: popUpFade 0.4s ease-out forwards;
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+@keyframes popUpFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .authPopUp form h2 {
-  margin-bottom: 1.5rem;
-  font-size: 1.6rem;
-  color: #333;
+  margin-bottom: 1.2rem;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #2e7d32;
+  text-align: center;
 }
 
 .authPopUp form input {
   width: 100%;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
+  padding: 0.8rem;
+  margin-bottom: 1.2rem;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 1rem;
+  transition: 0.2s ease;
 }
 
 .authPopUp form input:focus {
-  border-color: #007aff;
+  border-color: #66bb6a;
+  box-shadow: 0 0 0 3px rgba(102, 187, 106, 0.2);
   outline: none;
 }
 
 .authPopUp form button[type="submit"] {
   width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  background-color: #007aff;
+  padding: 0.9rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: linear-gradient(to right, #66bb6a, #43a047);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .authPopUp form button[type="submit"]:hover {
-  background-color: #005fcc;
+  background: linear-gradient(to right, #43a047, #2e7d32);
+  transform: scale(1.02);
 }
 
 .closePopUp {
   position: absolute;
-  top: 0.75rem;
+  top: 0.8rem;
   right: 1rem;
-  background: transparent;
+  background: none;
   border: none;
   font-size: 1.5rem;
-  color: #888;
+  color: #666;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .closePopUp:hover {
-  color: #333;
+  transform: scale(1.2);
+  color: #000;
 }
 
 .logout-btn {
@@ -87,6 +106,7 @@
   background-color: #d32f2f;
   color: white;
 }
+
 
 
 
