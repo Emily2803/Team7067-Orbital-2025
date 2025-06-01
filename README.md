@@ -45,6 +45,8 @@ Upcoming modules that are planned for future milestones.:
 - Achievements 
 
 ## System Design
+Below is the proposed UML class diagram for our ShelfAware web app:
+https://drive.google.com/file/d/1Ss5pTVBqDwaA90rSEjGWsAcWOcUkCWAq/view?usp=sharing
 
 -Frontend (React + TypeScript):
 The app's interface is built with React functional components, using TypeScript to catch errors early and improve code maintainability. We’ve styled components using plain CSS and HTML. The login form and homepage use reusable UI elements and manage user state effectively.
@@ -69,7 +71,6 @@ Implement Firebase Cloud Messaging to send expiry reminders to users' devices (M
 
 ## User Guide
 https://shelfaware-orbital.netlify.app
-
 
 
 ## Work Log
