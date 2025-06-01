@@ -136,7 +136,7 @@ export default function PantryPage() {
             else if (daysLeft <= 0) remindText = "Expired";
 
             return (
-              <div key={item.id} className="pantryCard">
+              <div key={item.id} className={`pantryCard ${daysLeft <= 0 ? 'expiredCard' : ''}`}>
                 <button
                   className="deleteBtn"
                   onClick={() => handleRemove(item.id)}

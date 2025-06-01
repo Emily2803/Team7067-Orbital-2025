@@ -23,7 +23,7 @@
 .hero-dim {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   z-index: 0;
 }
 
@@ -143,6 +143,7 @@
   text-align: left;
   transition: all 0.25s ease;
   border: 1px solid #e2f0e8;
+  cursor : pointer
 }
 
 .feature-card:hover {
