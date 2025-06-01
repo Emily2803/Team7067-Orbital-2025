@@ -65,6 +65,6 @@ Implement Firebase Cloud Messaging to send expiry reminders to users' devices (M
 
 ## Setup Instructions
 
-##Work Log
-https://docs.google.com/spreadsheets/d/1uvwY5zJe1rlmYZOSrHvpedEZY3KsdoFmI9sbk8u-dBs/edit?usp=sharing
+
+## Work Log
 
