@@ -1,0 +1,114 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.pantryOverview {
+    position: relative;
+    background-color: #e0f2e9;
+    padding:2rem;
+    padding-top: 4rem;
+    min-height:100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.pantryForm {
+    position: absolute;
+    top: 4rem;
+    right: 2rem;
+    display: flex;
+    gap: 8px;
+}
+
+.pantryForm input {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px #ccc;
+    border-radius: 4px;
+}
+
+.pantryForm button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.pantryHeading {
+    font-size: 2rem;
+    color: #388e3c;
+    margin: 0 0 1 0;
+    font-weight: 700;
+}
+
+.noItemText {
+    font-size: italic;
+    color: #888;
+    margin-top: 1rem
+}
+
+.pantryList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 1rem;
+}
+
+.pantryItemBox {
+    position: relative;
+    background: #f5f5f5;
+    border-radius: 10px;
+    padding: 25px 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-height: 100px;
+}
+
+.expiryReminder {
+    position: absolute;
+    top: 20px;
+    right: 70px;
+    background-color:rgba(0, 0, 0, 0.7);
+    color: #fff;
+    font-size: 12px;
+    padding: 10px 20px;
+    border-radius: 6px;
+}
+
+.pantryName {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+.pantryExpiry {
+  font-size: 14px;
+  color: #444;
+}
+
+.pantryDelete {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 16px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.pantryBackBtn {
+  background-color: transparent;
+  border: 1px;
+  color: #000;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.pantryBackBtn:hover {
+  text-decoration: underline;
+}
