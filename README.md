@@ -29,16 +29,20 @@ A built-in platform to list or claim surplus food within the NUS community. AI a
 ## Current Progress 
 
 ✅ Login & Register Page
-We’ve successfully implemented Firebase Authentication, allowing users to securely sign up and log in using their email and password. User login credentials are stored in Firebase Auth, and account data is managed through Firebase’s built-in backend services. This sets the foundation for personalized features in later stages.
+We’ve successfully implemented Firebase Authentication, allowing users to securely sign up and log in using their email and password. User login credentials are stored in Firebase Auth, and account data is managed through Firebase’s built-in backend services. This sets the foundation for personalised features in later stages.
 
 ✅ Basic Homepage (Welcome Dashboard)
-Once logged in, users are redirected to a simple homepage that displays a personalized welcome message. The homepage is designed using React components, with placeholder sections prepared for future modules such as:
+Once logged in, users are redirected to a simple homepage that displays a personalised welcome message. The homepage is built with modular React components and sets the stage for further feature expansion.
 
--Pantry inventory
+We’ve now also added a basic Pantry Inventory page, where users can log their food items along with expiry dates. This is fully integrated with Firebase Firestore, allowing data to be stored and synced in real time. Users can add items through a simple form, and each item is displayed in a grid with an expiry reminder tag. Expired items are highlighted to encourage timely consumption and reduce food waste.
 
--Recipe suggestions
+Upcoming modules that are planned for future milestones.:
 
--Food sharing page
+- Recipe suggestions
+
+- Food sharing page
+
+- Achievements 
 
 ## System Design
 
