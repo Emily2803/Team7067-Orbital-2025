@@ -1,17 +1,17 @@
-/* General layout */
+
 body {
   margin: 0;
   font-family: 'Outfit', sans-serif;
   background-color: #f3faf6;
 }
 
-/* Container */
+
 .pantryPage {
   padding: 2rem;
   min-height: 100vh;
 }
 
-/* Header and title group */
+
 .pantryHeader {
   display: flex;
   justify-content: space-between;
@@ -56,7 +56,7 @@ body {
   color: white;
 }
 
-/* Input form */
+
 .pantryForm {
   display: flex;
   gap: 0.75rem;
@@ -93,7 +93,7 @@ body {
   transform: scale(1.05);
 }
 
-/* Empty state */
+
 .noItems {
   font-size: 1rem;
   color: #888;
@@ -102,7 +102,7 @@ body {
   font-style: italic;
 }
 
-/* Grid of pantry cards */
+
 .pantryGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -110,7 +110,7 @@ body {
   margin-top: 1rem;
 }
 
-/* Each card */
+
 .pantryCard {
   background: #ffffff;
   border-radius: 1.25rem;
@@ -120,7 +120,7 @@ body {
   transition: transform 0.25s ease;
 }
 
-/* Add red tint for expired items */
+
 .expiredCard {
   border: 1px solid #d32f2f;
   background-color: #fff6f6;
@@ -135,7 +135,7 @@ body {
   transform: translateY(-4px);
 }
 
-/* Reminder badge */
+
 .reminderTag {
   position: absolute;
   top: 16px;
@@ -147,7 +147,7 @@ body {
   border-radius: 999px;
 }
 
-/* Delete button */
+
 .deleteBtn {
   position: absolute;
   top: 16px;
@@ -167,7 +167,7 @@ body {
   background-color: #d32f2f;
 }
 
-/* Card content */
+
 .cardBody {
   margin-top: 1.5rem;
 }
