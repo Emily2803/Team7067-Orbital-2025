@@ -4,6 +4,7 @@ import { auth, db } from "../../firebase";
 import {
   addDoc,
   deleteDoc,
+  updateDoc,
   doc,
   collection,
   onSnapshot,
@@ -19,26 +20,29 @@ interface PantryItem {
   userId: string;
   name: string;
   expiryDate: Date;
+  quantity: number;
+  remark?: string;
 }
 
 export default function PantryPage() {
-  const [name, changeName] = useState("");
-  const [items, changeItems] = useState<PantryItem[]>([]);
-  const [expiry, changeExpiry] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [editingItem, setEditingItem] = useState<PantryItem | null>(null);
+  const [name, setName] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [expiryDates, setExpiryDates] = useState<string[]>([""]);
+  const [remark, setRemark] = useState("");
+  const [items, setItems] = useState<PantryItem[]>([]);
   const navigate = useNavigate();
 
-  // Fetch pantry items on login
   useEffect(() => {
     let stopPantry: () => void = () => {};
     const stopAuth = auth.onAuthStateChanged((user) => {
       if (!user) return;
-
       const dbsearch = query(
         collection(db, "pantry"),
         where("userId", "==", user.uid),
         orderBy("expiryDate")
       );
-
       stopPantry = onSnapshot(dbsearch, (snapshot) => {
         const data: PantryItem[] = snapshot.docs.map((docSnap) => {
           const d = docSnap.data();
@@ -47,88 +51,170 @@ export default function PantryPage() {
             userId: d.userId,
             name: d.name,
             expiryDate: d.expiryDate.toDate(),
+            quantity: d.quantity,
+            remark: d.remark || "",
           };
         });
-        changeItems(data);
+        setItems(data);
       });
     });
-
     return () => stopPantry();
   }, []);
 
-  // Add new item
-  const handleAdd = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!auth.currentUser || name === "" || expiry === "") return;
+  const resetForm = () => {
+    setName("");
+    setQuantity(1);
+    setExpiryDates([""]);
+    setRemark("");
+    setEditingItem(null);
+    setShowPopup(false);
+  };
 
-    const expiryDate = Timestamp.fromDate(new Date(expiry));
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!auth.currentUser || name.trim() === "" || expiryDates[0].trim() === "") return;
+
     try {
-      await addDoc(collection(db, "pantry"), {
-        userId: auth.currentUser.uid,
-        name,
-        expiryDate,
-      });
-      changeName("");
-      changeExpiry("");
+      const currentUser = auth.currentUser.uid;
+
+      if (editingItem) {
+        const originalDate = editingItem.expiryDate.toISOString().split("T")[0];
+        if (expiryDates.length === 1 && expiryDates[0] === originalDate) {
+          await updateDoc(doc(db, "pantry", editingItem.id), {
+            name,
+            expiryDate: Timestamp.fromDate(new Date(expiryDates[0])),
+            quantity,
+            remark,
+          });
+        } else {
+          await deleteDoc(doc(db, "pantry", editingItem.id));
+          for (const date of expiryDates) {
+            if (!date.trim()) continue;
+            await addDoc(collection(db, "pantry"), {
+              userId: currentUser,
+              name,
+              expiryDate: Timestamp.fromDate(new Date(date)),
+              quantity,
+              remark,
+            });
+          }
+        }
+      } else {
+        for (const date of expiryDates) {
+          if (!date.trim()) continue;
+          await addDoc(collection(db, "pantry"), {
+            userId: currentUser,
+            name,
+            expiryDate: Timestamp.fromDate(new Date(date)),
+            quantity,
+            remark,
+          });
+        }
+      }
+
+      resetForm();
     } catch (err) {
       console.error("Error:", err);
     }
   };
 
-  // Remove item
-  const handleRemove = async (id: string) => {
+  const startEdit = (item: PantryItem) => {
+    setName(item.name);
+    setQuantity(item.quantity);
+    setExpiryDates([item.expiryDate.toISOString().split("T")[0]]);
+    setRemark(item.remark || "");
+    setEditingItem(item);
+    setShowPopup(true);
+  };
+
+  const handleDelete = async (id: string) => {
     try {
       await deleteDoc(doc(db, "pantry", id));
     } catch (err) {
-      console.error("Error:", err);
+      console.error("Delete Error:", err);
     }
+  };
+
+  const handleConsume = async (item: PantryItem) => {
+    if (item.quantity > 1) {
+      await updateDoc(doc(db, "pantry", item.id), {
+        quantity: item.quantity - 1,
+      });
+    } else {
+      await deleteDoc(doc(db, "pantry", item.id));
+    }
+  };
+
+  const updateDate = (index: number, value: string) => {
+    const updated = [...expiryDates];
+    updated[index] = value;
+    setExpiryDates(updated);
+  };
+
+  const addNewDate = () => setExpiryDates([...expiryDates, ""]);
+
+  const removeDate = (index: number) => {
+    if (expiryDates.length === 1) return;
+    const updated = expiryDates.filter((_, i) => i !== index);
+    setExpiryDates(updated);
   };
 
   return (
     <div className="pantryPage">
       <div className="pantryHeader">
-        <button className="backBtn" onClick={() => navigate(-1)}>
-          Back 
-        </button>
-
+        <button className="backBtn" onClick={() => navigate(-1)}>Back</button>
         <div className="titleGroup">
-          <h1 className="pageTitle"> My Inventory 𝜗𝜚🥐🥬🥛🍉🍰🍭⋆₊˚</h1>
-          <p className="pageSubtitle">
-            Keep track of expiry dates, reduce waste, and save money! 
-          </p>
+          <h1 className="pageTitle">My Inventory 🥐🥬🥛🍉🍰🍭</h1>
+          <p className="pageSubtitle">Track expiry dates, reduce waste, save money!</p>
         </div>
-
-        <form onSubmit={handleAdd} className="pantryForm">
-          <input
-            type="text"
-            placeholder="e.g. Milk, Bread, Eggs"
-            value={name}
-            onChange={(e) => changeName(e.target.value)}
-          />
-          <input
-            type="date"
-            value={expiry}
-            onChange={(e) => changeExpiry(e.target.value)}
-          />
-          <button type="submit">➕ Add</button>
-        </form>
+        <button className="openPopupBtn" onClick={() => setShowPopup(true)}>➕ Add Item</button>
       </div>
+
+      {showPopup && (
+        <div className="popupOverlay">
+          <div className="popup">
+            <h2>{editingItem ? "Edit Item" : "Add New Item"}</h2>
+            <form onSubmit={handleSubmit} className="popupForm">
+              <label>Food Name</label>
+              <input type="text" placeholder="e.g. Bread, Milk, Eggs" value={name} onChange={(e) => setName(e.target.value)} required />
+
+              <label>Quantity</label>
+              <input type="number" min={1} value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} required />
+
+              <label>Expiry Date(s)</label>
+              {expiryDates.map((date, i) => (
+                <div key={i} className="dateRow">
+                  <input type="date" value={date} onChange={(e) => updateDate(i, e.target.value)} required />
+                  {expiryDates.length > 1 && (
+                    <button type="button" className="removeDateBtn" onClick={() => removeDate(i)}>✖️</button>
+                  )}
+                </div>
+              ))}
+              <button type="button" className="addDateBtn" onClick={addNewDate}>+ Add Date</button>
+
+              <label>Remarks / Notes</label>
+              <textarea placeholder="Optional comments or storage info" value={remark} onChange={(e) => setRemark(e.target.value)} />
+
+              <div className="popupButtons">
+                <button type="submit">{editingItem ? "Update" : "Save"}</button>
+                <button type="button" onClick={resetForm}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {items.length === 0 ? (
         <p className="noItems">(No items in pantry yet 😔)</p>
       ) : (
         <div className="pantryGrid">
           {items.map((item) => {
-            const expiryDateObj = item.expiryDate;
-            const expiryDate = expiryDateObj.toLocaleDateString("en-GB", {
+            const expiryDate = item.expiryDate.toLocaleDateString("en-GB", {
               day: "numeric",
               month: "short",
               year: "numeric",
             });
-
-            const timeDiff = expiryDateObj.getTime() - new Date().getTime();
-            const daysLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-
+            const daysLeft = Math.floor((item.expiryDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
             let remindText = "";
             if (daysLeft === 3) remindText = "3 days left";
             else if (daysLeft === 2) remindText = "2 days left";
@@ -137,18 +223,17 @@ export default function PantryPage() {
 
             return (
               <div key={item.id} className={`pantryCard ${daysLeft <= 0 ? 'expiredCard' : ''}`}>
-                <button
-                  className="deleteBtn"
-                  onClick={() => handleRemove(item.id)}
-                >
-                  ×
-                </button>
-                {remindText && (
-                  <div className="reminderTag">{remindText}</div>
-                )}
+                {remindText && <div className="reminderTag">{remindText}</div>}
                 <div className="cardBody">
-                  <p className="itemName"> 🍓 {item.name}</p>
+                  <p className="itemName"> 🍓{item.name}</p>
                   <p className="itemExpiry">📅 Expires on {expiryDate}</p>
+                  <p className="itemExpiry">📦 Quantity: {item.quantity}</p>
+                  {item.remark && <p className="itemRemark">📝 {item.remark}</p>}
+                  <div className="popupButtons" style={{ justifyContent: "space-between" }}>
+                    <button onClick={() => handleConsume(item)}>✔️ Consumed</button>
+                    <button onClick={() => handleDelete(item.id)}>🗑️ Remove</button>
+                    <button onClick={() => startEdit(item)}>✏️ Edit</button>
+                  </div>
                 </div>
               </div>
             );
@@ -158,6 +243,13 @@ export default function PantryPage() {
     </div>
   );
 }
+
+
+
+
+
+
+
 
 
 
