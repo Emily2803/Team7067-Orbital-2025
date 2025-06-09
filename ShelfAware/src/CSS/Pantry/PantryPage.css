@@ -1,16 +1,16 @@
 
+
 body {
   margin: 0;
   font-family: 'Outfit', sans-serif;
-  background-color: #f3faf6;
+  background-color: #f9fdfb;
+  color: #333;
 }
-
 
 .pantryPage {
   padding: 2rem;
   min-height: 100vh;
 }
-
 
 .pantryHeader {
   display: flex;
@@ -39,60 +39,24 @@ body {
   margin-top: 0.25rem;
 }
 
-.backBtn {
+.backBtn,
+.openPopupBtn {
   background-color: white;
-  border: 1.5px solid #2e7d32;
+  border: 2px solid #2e7d32;
   color: #2e7d32;
-  font-size: 1rem;              
-  padding: 10px 20px;           
+  font-size: 1rem;
+  padding: 10px 20px;
   border-radius: 999px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.25s ease;
 }
 
-.backBtn:hover {
+.backBtn:hover,
+.openPopupBtn:hover {
   background-color: #2e7d32;
   color: white;
 }
-
-
-.pantryForm {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.pantryForm input {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  font-family: inherit;
-}
-
-.pantryForm input::placeholder {
-  color: #aaa;
-  font-style: italic;
-}
-
-.pantryForm button {
-  background-color: #2e7d32;
-  color: white;
-  border: none;
-  border-radius: 999px;
-  padding: 10px 20px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.pantryForm button:hover {
-  background-color: #1b5e20;
-  transform: scale(1.05);
-}
-
 
 .noItems {
   font-size: 1rem;
@@ -102,27 +66,29 @@ body {
   font-style: italic;
 }
 
-
 .pantryGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
   margin-top: 1rem;
 }
 
-
 .pantryCard {
   background: #ffffff;
   border-radius: 1.25rem;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
   padding: 1.5rem;
   position: relative;
   transition: transform 0.25s ease;
+  border: 1px solid #e0e0e0;
 }
 
+.pantryCard:hover {
+  transform: translateY(-4px);
+}
 
 .expiredCard {
-  border: 1px solid #d32f2f;
+  border: 1.5px solid #d32f2f;
   background-color: #fff6f6;
   box-shadow: 0 8px 24px rgba(211, 47, 47, 0.1);
 }
@@ -131,10 +97,32 @@ body {
   background-color: #d32f2f;
 }
 
-.pantryCard:hover {
-  transform: translateY(-4px);
+.cardBody {
+  margin-top: 1.5rem;
 }
 
+.itemName {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #2e7d32;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.itemExpiry,
+.itemRemark {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.itemRemark {
+  font-style: italic;
+}
 
 .reminderTag {
   position: absolute;
@@ -147,47 +135,181 @@ body {
   border-radius: 999px;
 }
 
-
-.deleteBtn {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+/* Popup Modal */
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  backdrop-filter: blur(4px);
 }
 
-.deleteBtn:hover {
-  background-color: #d32f2f;
+.popup {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-in-out;
+  overflow-y: auto;
+  max-height: 90vh;
 }
 
-
-.cardBody {
-  margin-top: 1.5rem;
+.popup h2 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #2e7d32;
+  margin-bottom: 1rem;
 }
 
-.itemName {
+.popupForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.popupForm label {
   font-weight: 600;
-  font-size: 1.1rem;
-  color: #333;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
+  color: #222;
+  font-size: 0.95rem;
 }
 
-.itemExpiry {
-  font-size: 0.9rem;
-  color: #777;
-  margin-top: 0.25rem;
+.popupForm input,
+.popupForm textarea,
+.popupForm button {
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.popupForm input[type="text"],
+.popupForm input[type="number"],
+.popupForm input[type="date"],
+.popupForm textarea {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.popupForm input:focus,
+.popupForm textarea:focus {
+  border-color: #2e7d32;
+  outline: none;
+}
+
+.popupForm input::placeholder,
+.popupForm textarea::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+.popupForm textarea {
+  min-height: 60px;
+  max-height: 150px;
+  resize: vertical;
+}
+
+/* Date field with remove button */
+.dateRow {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
+
+.addDateBtn {
+  background-color: white;
+  border: 1.5px solid #2e7d32;
+  color: #2e7d32;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  width: fit-content;
+}
+
+.addDateBtn:hover {
+  background-color: #2e7d32;
+  color: white;
+}
+
+.removeDateBtn {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  color: red;
+  cursor: pointer;
+  padding: 0 6px;
+}
+
+.popupButtons {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+
+.popupButtons button {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background-color: white;
+  color: #2e7d32;
+  border: 1.5px solid #2e7d32;
+  border-radius: 14px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  white-space: nowrap;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.popupButtons button:hover {
+  background-color: #2e7d32;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
+}
+
+
+.popupButtons button:nth-child(2) {
+  border-color: #c62828;
+  color: #c62828;
+}
+.popupButtons button:nth-child(2):hover {
+  background-color: #c62828;
+  color: white;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
 
 
