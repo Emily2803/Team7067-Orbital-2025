@@ -214,15 +214,20 @@ export default function PantryPage() {
               month: "short",
               year: "numeric",
             });
-            const daysLeft = Math.floor((item.expiryDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-            let remindText = "";
-            if (daysLeft === 3) remindText = "3 days left";
-            else if (daysLeft === 2) remindText = "2 days left";
-            else if (daysLeft === 1) remindText = "1 day left";
-            else if (daysLeft <= 0) remindText = "Expired";
 
+            const todayDate = new Date();
+            todayDate.setHours(0, 0, 0, 0);
+            const actualExpiry = new Date(item.expiryDate);
+            actualExpiry.setHours(0, 0, 0, 0);
+            const daysLeft = Math.floor((actualExpiry.getTime() - todayDate.getTime()) / (1000 * 60 * 60 * 24));
+
+            let remindText = "";
+            if (daysLeft === 2) remindText = "3 days left";
+            else if (daysLeft === 1) remindText = "2 day left";
+            else if (daysLeft === 0) remindText = "Expires today"
+            else if (daysLeft < 0) remindText = "Expired";
             return (
-              <div key={item.id} className={`pantryCard ${daysLeft <= 0 ? 'expiredCard' : ''}`}>
+              <div key={item.id} className={`pantryCard ${daysLeft < 0 ? 'expiredCard' : ''}`}>
                 {remindText && <div className="reminderTag">{remindText}</div>}
                 <div className="cardBody">
                   <p className="itemName"> 🍓{item.name}</p>
