@@ -6,20 +6,24 @@ import UserLogin from "./CSS/Authentication/login";
 import Home from './Home';
 import Landing from './Landing';
 import PantryPage from "./CSS/Pantry/PantryPage";
+import NotificationSetup from "./Notification";
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Landing />} /> 
-          <Route path="/signup" element={<UserSignUp />} />
-          <Route path="/login" element={<UserLogin />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/pantry" element={<PantryPage />} />
-        </Routes>
-      </div>
-    </Router>
+    <>
+      <NotificationSetup/>
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<Landing />} /> 
+            <Route path="/signup" element={<UserSignUp />} />
+            <Route path="/login" element={<UserLogin />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/pantry" element={<PantryPage />} />
+          </Routes>
+        </div>
+      </Router>
+    </>
   );
 }
 
