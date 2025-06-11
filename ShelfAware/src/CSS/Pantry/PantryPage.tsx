@@ -222,8 +222,8 @@ export default function PantryPage() {
             const daysLeft = Math.floor((actualExpiry.getTime() - todayDate.getTime()) / (1000 * 60 * 60 * 24));
 
             let remindText = "";
-            if (daysLeft === 2) remindText = "3 days left";
-            else if (daysLeft === 1) remindText = "2 days left";
+            if (daysLeft === 2) remindText = "2 days left";
+            else if (daysLeft === 1) remindText = "1 day left";
             else if (daysLeft === 0) remindText = "Expires today"
             else if (daysLeft < 0) remindText = "Expired";
             return (

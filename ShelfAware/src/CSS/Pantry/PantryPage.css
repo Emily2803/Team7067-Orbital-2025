@@ -32,16 +32,17 @@ body {
 
 
 .pageTitle {
-  font-size: 2.4rem;
   font-weight: 700;
   color: #2e7d32;
   margin: 0;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
 }
 
 .pageSubtitle {
-  font-size: 0.95rem;
+  font-size: clamp(0.75rem, 2.5vw, 0.95rem);
   color: #555;
   margin-top: 0.25rem;
+  
 }
 
 .backBtn,
@@ -49,18 +50,33 @@ body {
   background-color: white;
   border: 2px solid #2e7d32;
   color: #2e7d32;
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
   padding: 10px 20px;
   border-radius: 999px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.25s ease;
+  white-space: nowrap;
 }
 
 .backBtn:hover,
 .openPopupBtn:hover {
   background-color: #2e7d32;
   color: white;
+}
+
+
+@media (max-width: 200px) {
+  .pantryHeader {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .backBtn,
+  .openPopupBtn {
+    width: 100%;
+    max-width: 250px;
+  }
 }
 
 .noItems {
@@ -146,8 +162,6 @@ body {
 }
 
 
-
-/* Consumed / Edit / Remove button bar */
 .buttonBar {
   display: flex;
   justify-content: space-between;
@@ -198,7 +212,6 @@ body {
   background-color: #ffecec;
 }
 
-/* Popup Styling */
 .popupOverlay {
   position: fixed;
   top: 0;
@@ -310,7 +323,6 @@ body {
   padding: 0 6px;
 }
 
-/* Save / Cancel in popup */
 .popupButtons {
   display: flex;
   justify-content: flex-end;
@@ -345,7 +357,6 @@ body {
   color: white;
 }
 
-/* Animations */
 @keyframes pulse {
   0%, 100% { transform: scale(1); opacity: 1; }
   50% { transform: scale(1.05); opacity: 0.85; }
