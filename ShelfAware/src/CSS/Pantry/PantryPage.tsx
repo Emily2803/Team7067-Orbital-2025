@@ -223,21 +223,21 @@ export default function PantryPage() {
 
             let remindText = "";
             if (daysLeft === 2) remindText = "3 days left";
-            else if (daysLeft === 1) remindText = "2 day left";
+            else if (daysLeft === 1) remindText = "2 days left";
             else if (daysLeft === 0) remindText = "Expires today"
             else if (daysLeft < 0) remindText = "Expired";
             return (
-              <div key={item.id} className={`pantryCard ${daysLeft < 0 ? 'expiredCard' : ''}`}>
+              <div key={item.id} className={`pantryCard ${daysLeft <= 0 ? 'expiredCard' : ''}`}>
                 {remindText && <div className="reminderTag">{remindText}</div>}
                 <div className="cardBody">
                   <p className="itemName"> 🍓{item.name}</p>
                   <p className="itemExpiry">📅 Expires on {expiryDate}</p>
                   <p className="itemExpiry">📦 Quantity: {item.quantity}</p>
                   {item.remark && <p className="itemRemark">📝 {item.remark}</p>}
-                  <div className="popupButtons" style={{ justifyContent: "space-between" }}>
-                    <button onClick={() => handleConsume(item)}>✔️ Consumed</button>
-                    <button onClick={() => handleDelete(item.id)}>🗑️ Remove</button>
-                    <button onClick={() => startEdit(item)}>✏️ Edit</button>
+                  <div className="buttonBar" style={{ justifyContent: "space-between" }}>
+                    <button className="btn consumed" onClick={() => handleConsume(item)}> Consumed</button>
+                    <button className="btn edit" onClick={() => startEdit(item)}> Edit</button>
+                    <button className="btn remove" onClick={() => handleDelete(item.id)}> Remove</button>
                   </div>
                 </div>
               </div>

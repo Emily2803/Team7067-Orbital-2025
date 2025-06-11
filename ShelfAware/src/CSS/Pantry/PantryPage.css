@@ -1,5 +1,3 @@
-
-
 body {
   margin: 0;
   font-family: 'Outfit', sans-serif;
@@ -8,7 +6,7 @@ body {
 }
 
 .pantryPage {
-  padding: 2rem;
+  padding: 2rem 1.5rem;
   min-height: 100vh;
 }
 
@@ -16,15 +14,22 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1.5rem;
+  flex-wrap: nowrap;
   margin-bottom: 2.5rem;
+  padding: 0 1rem;
+  gap : 2rem;
+}
+
+.pantryHeader > .backBtn,
+.pantryHeader > .openPopupBtn {
+  flex-shrink: 0;
 }
 
 .titleGroup {
-  flex: 1;
-  min-width: 200px;
+  flex-grow: 1;
+  text-align: left;
 }
+
 
 .pageTitle {
   font-size: 2.4rem;
@@ -61,44 +66,48 @@ body {
 .noItems {
   font-size: 1rem;
   color: #888;
-  margin-top: 2rem;
   text-align: center;
   font-style: italic;
+  margin-top: 3rem;
 }
 
 .pantryGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
-  margin-top: 1rem;
 }
 
 .pantryCard {
-  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  background: white;
   border-radius: 1.25rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   padding: 1.5rem;
   position: relative;
-  transition: transform 0.25s ease;
+  transition: 0.25s ease;
   border: 1px solid #e0e0e0;
 }
 
 .pantryCard:hover {
   transform: translateY(-4px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
 }
 
 .expiredCard {
-  border: 1.5px solid #d32f2f;
-  background-color: #fff6f6;
-  box-shadow: 0 8px 24px rgba(211, 47, 47, 0.1);
-}
-
-.expiredCard .reminderTag {
-  background-color: #d32f2f;
+  border: 2px solid #d32f2f;
+  background-color: #fff5f5;
 }
 
 .cardBody {
-  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+  gap: 0.45rem;
+  
 }
 
 .itemName {
@@ -133,9 +142,63 @@ body {
   font-size: 0.75rem;
   padding: 6px 12px;
   border-radius: 999px;
+  animation: pulse 2s infinite;
 }
 
-/* Popup Modal */
+
+
+/* Consumed / Edit / Remove button bar */
+.buttonBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  margin-top: auto;
+  margin-bottom: 0.25rem;
+}
+
+.buttonBar .btn {
+  flex: 1;
+  padding: 10px 0;
+  font-size: 0.85rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: 0.2s ease;
+  text-align: center;
+}
+
+.buttonBar .btn:not(:last-child) {
+  border-right: 1px solid #eee;
+}
+
+.btn.consumed {
+  color: #2e7d32;
+}
+.btn.consumed:hover {
+  background-color: #eaf6ee;
+}
+
+.btn.edit {
+  color: #1565c0;
+}
+.btn.edit:hover {
+  background-color: #e5f0ff;
+}
+
+.btn.remove {
+  color: #d32f2f;
+}
+.btn.remove:hover {
+  background-color: #ffecec;
+}
+
+/* Popup Styling */
 .popupOverlay {
   position: fixed;
   top: 0;
@@ -151,13 +214,12 @@ body {
 }
 
 .popup {
-  background-color: #ffffff;
+  background-color: white;
   padding: 2rem;
   border-radius: 1.5rem;
   width: 90%;
   max-width: 500px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.3s ease-in-out;
   overflow-y: auto;
   max-height: 90vh;
 }
@@ -195,7 +257,6 @@ body {
   padding: 0.75rem 1rem;
   border: 1px solid #ccc;
   border-radius: 10px;
-  transition: border-color 0.2s;
   width: 100%;
   box-sizing: border-box;
 }
@@ -218,7 +279,6 @@ body {
   resize: vertical;
 }
 
-/* Date field with remove button */
 .dateRow {
   display: flex;
   align-items: center;
@@ -234,7 +294,6 @@ body {
   cursor: pointer;
   font-size: 0.9rem;
   transition: all 0.2s ease;
-  width: fit-content;
 }
 
 .addDateBtn:hover {
@@ -251,64 +310,50 @@ body {
   padding: 0 6px;
 }
 
+/* Save / Cancel in popup */
 .popupButtons {
   display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
-
 .popupButtons button {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 500;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 999px;
+  border: 2px solid #2e7d32;
   background-color: white;
   color: #2e7d32;
-  border: 1.5px solid #2e7d32;
-  border-radius: 14px;
-  padding: 6px 16px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  white-space: nowrap;
-  line-height: 1.2;
-  text-decoration: none;
 }
 
 .popupButtons button:hover {
   background-color: #2e7d32;
   color: white;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
 }
 
-
-.popupButtons button:nth-child(2) {
-  border-color: #c62828;
-  color: #c62828;
+.popupButtons button:last-child {
+  border-color: #d32f2f;
+  color: #d32f2f;
 }
-.popupButtons button:nth-child(2):hover {
-  background-color: #c62828;
+.popupButtons button:last-child:hover {
+  background-color: #d32f2f;
   color: white;
 }
 
-/* Fade in animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+/* Animations */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.85; }
 }
+
+
+
+
 
 
 
