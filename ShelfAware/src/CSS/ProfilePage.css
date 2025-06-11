@@ -1,80 +1,100 @@
-
-
 .profile-page {
   max-width: 500px;
-  margin: 4rem auto;
-  padding: 2.5rem;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #fefefe;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
   font-family: 'Outfit', sans-serif;
   color: #333;
 }
 
 .profile-page h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #2e7d32;
-  margin-bottom: 1.5rem;
   text-align: center;
+  margin-bottom: 2rem;
+  color: #2e7d32;
 }
 
 .profile-page label {
   display: block;
   font-weight: 600;
-  margin-bottom: 0.5rem;
-  font-size: 0.95rem;
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
   color: #444;
 }
 
-.profile-page input[type="text"] {
+.profile-page input {
   width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1.5px solid #ccc;
-  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   font-size: 0.95rem;
-  font-family: inherit;
-  margin-bottom: 1.5rem;
-  transition: border-color 0.2s;
+  transition: border 0.3s;
+  font-family: 'Outfit', sans-serif;
+  font-style: italic;
 }
 
-.profile-page input[type="text"]:focus {
-  border-color: #2e7d32;
+.profile-page input:focus {
+  border-color: #66bb6a;
   outline: none;
 }
 
 .profile-buttons {
+  margin-top: 2rem;
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 1rem;
 }
 
 .profile-buttons button {
   flex: 1;
-  padding: 10px 20px;
-  font-size: 1rem;
+  padding: 0.6rem 1.4rem;
+  border: 2px solid;
   border-radius: 999px;
-  border: 2px solid #2e7d32;
-  background-color: white;
-  color: #2e7d32;
-  font-family: 'Outfit', sans-serif;
   font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
+  background-color: white;
   transition: all 0.25s ease;
 }
 
-.profile-buttons button:hover {
+/* Save Button */
+.profile-buttons button:first-child {
+  border-color: #2e7d32;
+  color: #2e7d32;
+}
+.profile-buttons button:first-child:hover {
   background-color: #2e7d32;
   color: white;
 }
 
+/* Cancel Button */
 .profile-buttons button:last-child {
-  border-color: #c62828;
-  color: #c62828;
+  border-color: #d32f2f;
+  color: #d32f2f;
 }
-
 .profile-buttons button:last-child:hover {
-  background-color: #c62828;
+  background-color: #d32f2f;
   color: white;
 }
+
+.profile-page textarea {
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: 'Outfit', sans-serif;
+  font-style: italic;
+  resize: vertical;
+  min-height: 70px;
+  max-height: 180px;
+  transition: border 0.3s;
+}
+.profile-page textarea:focus {
+  border-color: #66bb6a;
+  outline: none;
+}
+
+
+
