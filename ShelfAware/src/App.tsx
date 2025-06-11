@@ -7,6 +7,7 @@ import Home from './Home';
 import Landing from './Landing';
 import PantryPage from "./CSS/Pantry/PantryPage";
 import NotificationSetup from "./Notification";
+import ProfilePage from "./profilePage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/login" element={<UserLogin />} />
             <Route path="/home" element={<Home />} />
             <Route path="/pantry" element={<PantryPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </div>
       </Router>

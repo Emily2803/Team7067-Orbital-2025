@@ -6,6 +6,7 @@ import Footer from './Footer';
 import UserLogout from './CSS/Authentication/logout';
 import FoodGif from './CSS/Food.gif';
 import PantryBg from './CSS/pantry.jpg';
+import ProfileIcon from './CSS/profile-icon.svg'; 
 
 const Home: React.FC = () => {
   const [userName, setUserName] = useState<string | null>(null);
@@ -23,47 +24,47 @@ const Home: React.FC = () => {
   return (
     <div className="home">
       <section className="hero" style={{ backgroundImage: `url(${PantryBg})` }}>
-        <div className="hero-dim" />
+    <div className="hero-dim" />
 
-        <div className="home-header">
-          <h2 className="welcome">👋 Welcome Back, {userName}!</h2>
-          <UserLogout />
-        </div>
+    <div className="top-bar">
+       <img src={ProfileIcon} alt="Profile" className="profile-icon" onClick={() => navigate("/profile")} />
+       <UserLogout />
+    </div>
 
-        <div className="title-row">
-          <h1 className="title">ShelfAware</h1>
-          <img src={FoodGif} alt="animated pantry gif" className="title-gif" />
-        </div>
+    <div className="main-content">
+      <h2 className="welcome">👋 Welcome Back, {userName}!</h2>
+      <div className="title-row">
+        <h1 className="title">ShelfAware</h1>
+        <img src={FoodGif} alt="Pantry gif" className="title-gif" />
+      </div>
+      <p className="subtitle">
+        a playful twist on being "self-aware" — but for your pantry ִ ࣪𖤐.ᐟ 
+      </p>
+      <button className="cta-button" onClick={() => navigate("/pantry")}>
+        Open My Pantry
+      </button>
+    </div>
+    </section>
 
-        <p className="subtitle">
-          a playful twist on being "self-aware" — but for your pantry ִ ࣪𖤐.ᐟ
-        </p>
-        <p className="highlight">
-          Track your food, reduce waste, and make smarter choices.
-        </p>
-        <button className="cta-button" onClick={() => navigate("/pantry")}>
-          Start Managing
-        </button>
-      </section>
 
       <section className="features">
-        <h2>Why You'll Love ShelfAware</h2>
+        <h2>Why Use ShelfAware?</h2>
         <div className="feature-list">
           <div className="feature-card">
-            🧠 <strong>Mindful Tracking</strong>
-            <p>Stay "shelf-aware" of what is in your pantry and fridge.</p>
+            🧠 <strong>Track with Intention</strong>
+            <p>Stay aware of what’s in your kitchen and when it expires.</p>
           </div>
           <div className="feature-card">
-            ⏰ <strong>Expiry Alerts</strong>
-            <p>Get notified before your food goes bad — no more nasty surprises.</p>
+            ⏰ <strong>Expiry Notifications</strong>
+            <p>Gentle nudges to help you eat food before it's too late.</p>
           </div>
           <div className="feature-card">
-            🍳 <strong>Smart Recipes</strong>
-            <p>Use ingredients on hand to reduce waste and save money.</p>
+            🍳 <strong>Recipe Suggestions</strong>
+            <p>Use what you have — cook smarter, not harder.</p>
           </div>
           <div className="feature-card">
-            🤝 <strong>Food Sharing</strong>
-            <p>List surplus food for others to claim and build a sustainable community.</p>
+            🥕 <strong>Food Exchange</strong>
+            <p>Share surplus ingredients with others and reduce waste.</p>
           </div>
         </div>
       </section>
@@ -73,6 +74,7 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
 
 
 
