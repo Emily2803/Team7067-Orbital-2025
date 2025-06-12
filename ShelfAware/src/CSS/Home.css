@@ -6,7 +6,7 @@
   margin: 0;
 }
 
-/* Hero Section */
+
 .hero {
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -20,6 +20,7 @@
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05);
   padding: 4rem 2rem 3rem;
   animation: fadeSlideIn 0.6s ease;
+  z-index: 1;
 }
 
 .hero-dim {
@@ -34,12 +35,16 @@
   z-index: 1;
 }
 
-.top-bar {
-  grid-column: 2;
+.profile-wrapper {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
+  flex-direction: column;
+  position: relative;
+  gap: 1rem;
+  z-index: 10;
+}
+.logout-wrap{
+  display: flex;
+  justify-content: end;
 }
 
 .profile-icon {
@@ -48,8 +53,59 @@
   cursor: pointer;
   transition: transform 0.3s ease;
 }
+
 .profile-icon:hover {
   transform: scale(1.15);
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 44px;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  padding: 0.5rem 0;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease;
+  pointer-events: auto;
+}
+
+.profile-dropdown.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.profile-dropdown.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+
+.profile-dropdown button {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  width: 100%;
+  z-index: 999;
+  position: relative;
+  font-family: 'Outfit', sans-serif;
+}
+
+.profile-dropdown button:hover {
+  background-color: #f1f1f1;
 }
 
 .logout-btn {
@@ -73,9 +129,14 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  position: relative;
+  z-index: -1;         /* Push it back in stacking context */
+  pointer-events: auto; /* Still allow normal interaction */
+  margin: 0 auto;
+  width: 80%;
+
 }
 
-/* Typography */
 .welcome {
   font-size: clamp(1rem, 3vw, 1.6rem);
   color: #388e3c;
@@ -189,7 +250,6 @@
   50% { transform: translateY(-4px); }
 }
 
-/* Responsive tweaks */
 @media (max-width: 768px) {
   .hero {
     margin: 1rem;
@@ -201,11 +261,3 @@
     padding-bottom: 1rem;
   }
 }
-
-
-
-
-
-
-
-
