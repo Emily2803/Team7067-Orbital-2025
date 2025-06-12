@@ -33,7 +33,7 @@ const Home: React.FC = () => {
       alt="Profile"
       className="profile-icon"
       onClick={() => setShowDropdown(!showDropdown)}
-      title="Profile Menu"
+      title="Profile Menu "
     />
 
     <div
