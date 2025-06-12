@@ -9,15 +9,19 @@ firebase.initializeApp({
     appId: "1:942954308450:web:c8a2d4fd5e73ec4484423b"
 });
 
-const messaging = firebase.messaging();
+initializeApp(firebaseConfig);
+const text = firebase.messaging();
 
-messaging.onBackgroundMessage(function (payload) {
-    console.log("[firebase-notification-sw.js] Received background message: ", payload);
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-    body: payload.notification.body,
-    icon: "/logo192.png"
-};
-
-self.registration.showNotification(notificationTitle, notificationOptions);
+onBackgroundMessage(text, (payload) => {
+    const { title, body } = payload.notification || {};
+    self.registration.showNotification(title || "ShelfAware", {
+    body: body || "",
+    icon: "/logo192.png",
+    data: { clickToPantry: "/pantry" }
+    });
+});
+self.addEventListener("notificationclick", (event) => {
+    event.notification.close();
+    const url = event.notification.data.clickToPantry || "/";
+    event.waitUntil(clients.openWindow(url));
 });
