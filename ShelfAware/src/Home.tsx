@@ -11,6 +11,7 @@ import ProfileIcon from './CSS/profile-icon.svg';
 const Home: React.FC = () => {
   const [userName, setUserName] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     const user = auth.currentUser;
@@ -26,10 +27,28 @@ const Home: React.FC = () => {
       <section className="hero" style={{ backgroundImage: `url(${PantryBg})` }}>
     <div className="hero-dim" />
 
-    <div className="top-bar">
-       <img src={ProfileIcon} alt="Profile" className="profile-icon" onClick={() => navigate("/profile")} />
-       <UserLogout />
-    </div>
+  <div className="profile-wrapper">
+  <img
+      src={ProfileIcon}
+      alt="Profile"
+      className="profile-icon"
+      onClick={() => setShowDropdown(!showDropdown)}
+      title="Profile Menu"
+    />
+
+    <div
+  className={`profile-dropdown ${showDropdown ? 'visible' : 'hidden'}`}
+>
+  <button onClick={() => { setShowDropdown(false); navigate("/profile"); }}>
+    Edit Profile
+  </button>
+  <button onClick={() => { setShowDropdown(false); navigate("/changepassword"); }}>
+    Change Password
+  </button>
+</div>
+  </div>
+
+  <div className='logout-wrap'> <UserLogout /></div>
 
     <div className="main-content">
       <h2 className="welcome">👋 Welcome Back, {userName}!</h2>

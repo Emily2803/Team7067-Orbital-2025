@@ -8,6 +8,7 @@ import Landing from './Landing';
 import PantryPage from "./CSS/Pantry/PantryPage";
 import NotificationSetup from "./Notification";
 import ProfilePage from "./profilePage";
+import ChangePassword from "./ChangePassword";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/pantry" element={<PantryPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/changepassword" element={<ChangePassword />} />
           </Routes>
         </div>
       </Router>
