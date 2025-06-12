@@ -108,5 +108,16 @@
 }
 
 
+.toggle-visibilityy {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transform: translateY(-40%);
+}
+
+
 
 

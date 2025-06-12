@@ -417,6 +417,7 @@
     "react-dom": "^19.0.0",
     "react-fast-compare": "^3.2.2",
     "react-freeze": "^1.0.4",
+    "react-icons": "^4.10.1",
     "react-is": "^19.1.0",
     "react-native": "^0.79.2",
     "react-native-edge-to-edge": "^1.6.0",
@@ -585,7 +586,6 @@
     "yargs-parser": "^21.1.1",
     "yocto-queue": "^0.1.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

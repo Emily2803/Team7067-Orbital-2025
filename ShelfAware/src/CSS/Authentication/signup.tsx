@@ -7,6 +7,7 @@ import './Auth.css';
 function UserSignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const navigate = useNavigate();
@@ -51,13 +52,24 @@ function UserSignUp() {
           onChange={e => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
+
+        <div className="password-field">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
+          <button
+            type="button"
+            className="toggle-visibilityy"
+            onClick={() => setShowPassword(prev => !prev)}
+          >
+            {showPassword ? '🔓' : '🔒'}
+          </button>
+        </div>
+
         <button type="submit">Sign Up</button>
       </form>
     </div>
@@ -65,5 +77,6 @@ function UserSignUp() {
 }
 
 export default UserSignUp;
+
 
 

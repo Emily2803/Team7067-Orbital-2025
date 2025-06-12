@@ -54,7 +54,7 @@ export default function ChangePassword() {
             className="toggle-visibility"
             onClick={() => setShowCurrent((prev) => !prev)}
           >
-            {showCurrent ? '🙈' : '👁️'}
+            {showCurrent ? '🔓' : '🔒'}
           </button>
         </div>
 
@@ -72,7 +72,7 @@ export default function ChangePassword() {
             className="toggle-visibility"
             onClick={() => setShowNew((prev) => !prev)}
           >
-            {showNew ? '🙈' : '👁️'}
+            {showNew ? '🔓' : '🔒'}
           </button>
         </div>
 

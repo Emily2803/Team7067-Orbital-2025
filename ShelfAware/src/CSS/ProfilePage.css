@@ -96,5 +96,25 @@
   outline: none;
 }
 
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 2.5rem;
+}
+
+.toggle-visibility {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transform: translateY(-9%);
+}
 
 
