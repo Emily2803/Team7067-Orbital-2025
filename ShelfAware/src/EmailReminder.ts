@@ -62,5 +62,4 @@ for (const uid of userIds) {
 
 sendExpiryEmails().catch(console.error);
 
-// Required for isolatedModules
 export {};
