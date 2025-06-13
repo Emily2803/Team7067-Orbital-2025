@@ -1,0 +1,30 @@
+name: Email Expiry Reminder
+
+on:
+    schedule:
+        - cron: '0 0 * * *'
+    workflow_dispatch:
+
+jobs:
+  send-emails:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get code from GitHub
+        uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install packages
+        run: npm install
+
+      - name: Send expiry emails
+        run: |
+          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > serviceAccount.json
+          export GOOGLE_APPLICATION_CREDENTIALS=serviceAccount.json
+          npx ts-node src/EmailReminder.ts
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
