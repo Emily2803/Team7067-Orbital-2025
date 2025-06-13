@@ -19,7 +19,7 @@ jobs:
           node-version: '18'
 
       - name: Install packages
-        run: npm install
+        run: npm install --no-optional
 
       - name: Send expiry emails
         run: |
