@@ -8,3 +8,16 @@
   border-top: 1px solid #ddd;
   font-weight: 400;
 }
+
+.footer-message {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.footer-copyright {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: #999;
+}
+

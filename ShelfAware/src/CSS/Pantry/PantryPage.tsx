@@ -14,6 +14,7 @@ import {
   where,
 } from "firebase/firestore";
 import "./PantryPage.css";
+import Footer from "../../Footer";
 
 interface PantryItem {
   id: string;
@@ -245,6 +246,7 @@ export default function PantryPage() {
           })}
         </div>
       )}
+    <Footer/>
     </div>
   );
 }

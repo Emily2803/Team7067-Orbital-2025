@@ -1,12 +1,14 @@
 import React from 'react';
-import "./CSS/Footer.css"
+import "./CSS/Footer.css";
 
 function Footer() {
   return (
     <div className="Footer">
-      <h1 className='Footer'>Built with 🧡 for students, communities, and fridge space everywhere.</h1>
+      <p className="footer-message">Built with 🧡 for students, communities, and fridge space everywhere.</p>
+      <p className="footer-copyright">© 2025 ShelfAware. All rights reserved.</p>
     </div>
   );
 }
 
 export default Footer;
+

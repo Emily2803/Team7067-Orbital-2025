@@ -10,7 +10,7 @@
   font-family: 'Outfit', sans-serif;
   position: relative;
   overflow: hidden;
-  padding: 2rem;
+  padding: 2rem 1rem;
 }
 
 .landing-container::before {

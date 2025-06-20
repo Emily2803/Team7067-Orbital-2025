@@ -23,9 +23,9 @@ const Home: React.FC = () => {
   }, [navigate]);
 
   return (
-    <div className="home">
-      <section className="hero" style={{ backgroundImage: `url(${PantryBg})` }}>
-    <div className="hero-dim" />
+  <div className="home">
+    <section className="hero" style={{ backgroundImage: `url(${PantryBg})` }}>
+  <div className="hero-dim" />
 
   <div className="profile-wrapper">
   <img
@@ -36,63 +36,79 @@ const Home: React.FC = () => {
       title="Profile Menu "
     />
 
-    <div
-  className={`profile-dropdown ${showDropdown ? 'visible' : 'hidden'}`}
->
+  <div
+  className={`profile-dropdown ${showDropdown ? 'visible' : 'hidden'}`}>
   <button onClick={() => { setShowDropdown(false); navigate("/profile"); }}>
     Edit Profile
   </button>
   <button onClick={() => { setShowDropdown(false); navigate("/changepassword"); }}>
     Change Password
   </button>
-</div>
+  </div>
   </div>
 
-  <div className='logout-wrap'> <UserLogout /></div>
+<h2 className="welcome"> Welcome Back, {userName}!</h2>
+<div className='logout-wrap'> <UserLogout /></div>
 
-    <div className="main-content">
-      <h2 className="welcome">👋 Welcome Back, {userName}!</h2>
-      <div className="title-row">
-        <h1 className="title">ShelfAware</h1>
-        <img src={FoodGif} alt="Pantry gif" className="title-gif" />
+  <div className="main-content">
+    <div className="title-row">
+      <h1 className="title">ShelfAware</h1>
+      <img src={FoodGif} alt="Pantry gif" className="title-gif" />
+    </div>
+    <p className="subtitle">
+      a playful twist on being "self-aware" — but for your pantry ִ ࣪𖤐.ᐟ 
+    </p>
+    <button className="cta-button" onClick={() => navigate("/pantry")}>
+      Manage my Pantry
+    </button>
+  </div>
+  </section>
+
+
+  <section className="features">
+    <h2>Why Use ShelfAware?</h2>
+    <div className="feature-list">
+      <div className="feature-card" onClick={() => navigate("/pantry")}>
+        🧠 <strong>Pantry Overview </strong>
+        <p>Stay aware of what’s in your kitchen and when it expires.</p>
       </div>
-      <p className="subtitle">
-        a playful twist on being "self-aware" — but for your pantry ִ ࣪𖤐.ᐟ 
-      </p>
-      <button className="cta-button" onClick={() => navigate("/pantry")}>
-        Open My Pantry
-      </button>
+      <div className="feature-card" onClick={() => navigate("/notifications")}>
+        ⏰ <strong>Expiry Notifications</strong>
+        <p>Gentle nudges to help you eat food before it's too late.</p>
+      </div>
+      <div className="feature-card" onClick={() => navigate("/recipes")}>
+        🍳 <strong>Recipe Suggestions</strong>
+        <p>Use what you have — cook smarter, not harder.</p>
+      </div>
+      <div className="feature-card" onClick={() => navigate("/exchange")}>
+        🥕 <strong>Food Exchange</strong>
+        <p>Share surplus ingredients with others and reduce waste.</p>
+      </div>
+      <div className="feature-card" onClick={() => navigate("/progress")}>
+        ⭐️ <strong>Achievements & Progress</strong>
+        <p>Track your sustainability milestones and pantry usage streaks.</p>
+      </div>
     </div>
-    </section>
-
-
-      <section className="features">
-        <h2>Why Use ShelfAware?</h2>
-        <div className="feature-list">
-          <div className="feature-card">
-            🧠 <strong>Track with Intention</strong>
-            <p>Stay aware of what’s in your kitchen and when it expires.</p>
-          </div>
-          <div className="feature-card">
-            ⏰ <strong>Expiry Notifications</strong>
-            <p>Gentle nudges to help you eat food before it's too late.</p>
-          </div>
-          <div className="feature-card">
-            🍳 <strong>Recipe Suggestions</strong>
-            <p>Use what you have — cook smarter, not harder.</p>
-          </div>
-          <div className="feature-card">
-            🥕 <strong>Food Exchange</strong>
-            <p>Share surplus ingredients with others and reduce waste.</p>
-          </div>
-        </div>
-      </section>
-      <Footer />
-    </div>
+  </section>
+  <Footer />
+  </div>
   );
 };
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

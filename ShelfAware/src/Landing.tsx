@@ -1,11 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CSS/Landing.css';
+import Footer from './Footer';
 
 const Landing: React.FC = () => {
   const navigate = useNavigate();
 
   return (
+    <div className ="mainwrapper">
     <div className="landing-container">
       <div className="landing-card">
         <h1 className="landing-title">
@@ -18,6 +20,9 @@ const Landing: React.FC = () => {
         </div>
       </div>
     </div>
+      <Footer /> 
+    </div>
+
   );
 };
 
