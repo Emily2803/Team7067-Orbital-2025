@@ -162,91 +162,93 @@ export default function PantryPage() {
 
   return (
     <div className="pantryPage">
-      <div className="pantryHeader">
-        <button className="backBtn" onClick={() => navigate(-1)}>Back</button>
-        <div className="titleGroup">
-          <h1 className="pageTitle">My Inventory 🥐🥬🥛🍉🍰🍭</h1>
-          <p className="pageSubtitle">Track expiry dates, reduce waste, save money!</p>
-        </div>
-        <button className="openPopupBtn" onClick={() => setShowPopup(true)}>➕ Add Item</button>
-      </div>
-
-      {showPopup && (
-        <div className="popupOverlay">
-          <div className="popup">
-            <h2>{editingItem ? "Edit Item" : "Add New Item"}</h2>
-            <form onSubmit={handleSubmit} className="popupForm">
-              <label>Food Name</label>
-              <input type="text" placeholder="e.g. Bread, Milk, Eggs" value={name} onChange={(e) => setName(e.target.value)} required />
-
-              <label>Quantity</label>
-              <input type="number" min={1} value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} required />
-
-              <label>Expiry Date(s)</label>
-              {expiryDates.map((date, i) => (
-                <div key={i} className="dateRow">
-                  <input type="date" value={date} onChange={(e) => updateDate(i, e.target.value)} required />
-                  {expiryDates.length > 1 && (
-                    <button type="button" className="removeDateBtn" onClick={() => removeDate(i)}>✖️</button>
-                  )}
-                </div>
-              ))}
-              <button type="button" className="addDateBtn" onClick={addNewDate}>+ Add Date</button>
-
-              <label>Remarks / Notes</label>
-              <textarea placeholder="Optional comments or storage info" value={remark} onChange={(e) => setRemark(e.target.value)} />
-
-              <div className="popupButtons">
-                <button type="submit">{editingItem ? "Update" : "Save"}</button>
-                <button type="button" onClick={resetForm}>Cancel</button>
-              </div>
-            </form>
+      <div className="pantryContent">
+        <div className="pantryHeader">
+          <button className="backBtn" onClick={() => navigate(-1)}>Back</button>
+          <div className="titleGroup">
+            <h1 className="pageTitle">My Inventory 🥐🥬🥛🍉🍰🍭</h1>
+            <p className="pageSubtitle">Track expiry dates, reduce waste, save money!</p>
           </div>
+          <button className="openPopupBtn" onClick={() => setShowPopup(true)}>➕ Add Item</button>
         </div>
-      )}
 
-      {items.length === 0 ? (
-        <p className="noItems">(No items in pantry yet 😔)</p>
-      ) : (
-        <div className="pantryGrid">
-          {items.map((item) => {
-            const expiryDate = item.expiryDate.toLocaleDateString("en-GB", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            });
+        {showPopup && (
+          <div className="popupOverlay">
+            <div className="popup">
+              <h2>{editingItem ? "Edit Item" : "Add New Item"}</h2>
+              <form onSubmit={handleSubmit} className="popupForm">
+                <label>Food Name</label>
+                <input type="text" placeholder="e.g. Bread, Milk, Eggs" value={name} onChange={(e) => setName(e.target.value)} required />
 
-            const todayDate = new Date();
-            todayDate.setHours(0, 0, 0, 0);
-            const actualExpiry = new Date(item.expiryDate);
-            actualExpiry.setHours(0, 0, 0, 0);
-            const daysLeft = Math.floor((actualExpiry.getTime() - todayDate.getTime()) / (1000 * 60 * 60 * 24));
+                <label>Quantity</label>
+                <input type="number" min={1} value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} required />
 
-            let remindText = "";
-            if (daysLeft === 2) remindText = "2 days left";
-            else if (daysLeft === 1) remindText = "1 day left";
-            else if (daysLeft === 0) remindText = "Expires today"
-            else if (daysLeft < 0) remindText = "Expired";
-            return (
-              <div key={item.id} className={`pantryCard ${daysLeft <= 0 ? 'expiredCard' : ''}`}>
-                {remindText && <div className="reminderTag">{remindText}</div>}
-                <div className="cardBody">
-                  <p className="itemName"> 🍓{item.name}</p>
-                  <p className="itemExpiry">📅 Expires on {expiryDate}</p>
-                  <p className="itemExpiry">📦 Quantity: {item.quantity}</p>
-                  {item.remark && <p className="itemRemark">📝 {item.remark}</p>}
-                  <div className="buttonBar" style={{ justifyContent: "space-between" }}>
-                    <button className="btn consumed" onClick={() => handleConsume(item)}> Consumed</button>
-                    <button className="btn edit" onClick={() => startEdit(item)}> Edit</button>
-                    <button className="btn remove" onClick={() => handleDelete(item.id)}> Remove</button>
+                <label>Expiry Date(s)</label>
+                {expiryDates.map((date, i) => (
+                  <div key={i} className="dateRow">
+                    <input type="date" value={date} onChange={(e) => updateDate(i, e.target.value)} required />
+                    {expiryDates.length > 1 && (
+                      <button type="button" className="removeDateBtn" onClick={() => removeDate(i)}>✖️</button>
+                    )}
+                  </div>
+                ))}
+                <button type="button" className="addDateBtn" onClick={addNewDate}>+ Add Date</button>
+
+                <label>Remarks / Notes</label>
+                <textarea placeholder="Optional comments or storage info" value={remark} onChange={(e) => setRemark(e.target.value)} />
+
+                <div className="popupButtons">
+                  <button type="submit">{editingItem ? "Update" : "Save"}</button>
+                  <button type="button" onClick={resetForm}>Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {items.length === 0 ? (
+          <p className="noItems">(No items in pantry yet 😔)</p>
+        ) : (
+          <div className="pantryGrid">
+            {items.map((item) => {
+              const expiryDate = item.expiryDate.toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              });
+
+              const todayDate = new Date();
+              todayDate.setHours(0, 0, 0, 0);
+              const actualExpiry = new Date(item.expiryDate);
+              actualExpiry.setHours(0, 0, 0, 0);
+              const daysLeft = Math.floor((actualExpiry.getTime() - todayDate.getTime()) / (1000 * 60 * 60 * 24));
+
+              let remindText = "";
+              if (daysLeft === 2) remindText = "2 days left";
+              else if (daysLeft === 1) remindText = "1 day left";
+              else if (daysLeft === 0) remindText = "Expires today"
+              else if (daysLeft < 0) remindText = "Expired";
+              return (
+                <div key={item.id} className={`pantryCard ${daysLeft <= 0 ? 'expiredCard' : ''}`}>
+                  {remindText && <div className="reminderTag">{remindText}</div>}
+                  <div className="cardBody">
+                    <p className="itemName"> 🍓{item.name}</p>
+                    <p className="itemExpiry">📅 Expires on {expiryDate}</p>
+                    <p className="itemExpiry">📦 Quantity: {item.quantity}</p>
+                    {item.remark && <p className="itemRemark">📝 {item.remark}</p>}
+                    <div className="buttonBar" style={{ justifyContent: "space-between" }}>
+                      <button className="btn consumed" onClick={() => handleConsume(item)}> Consumed</button>
+                      <button className="btn edit" onClick={() => startEdit(item)}> Edit</button>
+                      <button className="btn remove" onClick={() => handleDelete(item.id)}> Remove</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    <Footer/>
+              );
+            })}
+          </div>
+        )}
+      </div>
+        <Footer/>
     </div>
   );
 }

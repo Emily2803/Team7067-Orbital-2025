@@ -9,6 +9,7 @@ import PantryPage from "./CSS/Pantry/PantryPage";
 import NotificationSetup from "./Notification";
 import ProfilePage from "./profilePage";
 import ChangePassword from "./ChangePassword";
+import Recipes from './Recipes';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/pantry" element={<PantryPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/changepassword" element={<ChangePassword />} />
+            <Route path="/recipes" element={<Recipes />} />
           </Routes>
         </div>
       </Router>
