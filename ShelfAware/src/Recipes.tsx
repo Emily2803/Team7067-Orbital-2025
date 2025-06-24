@@ -26,6 +26,7 @@ const Recipes: React.FC = () => {
   const [recipeIdeas, setRecipeIdeas] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [excludedWarning, setExcludedWarning] = useState("");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -54,35 +55,52 @@ const Recipes: React.FC = () => {
   }, [navigate]);
 
   const fetchRecipeIdeas = async () => {
-    setLoading(true);
-    setError("");
-    setRecipeIdeas([]);
+  setLoading(true);
+  setError("");
+  setRecipeIdeas([]);
+  setExcludedWarning("");
 
-    try {
-      const res = await fetch(RECIPE_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ingredients: items.map((i) => i.name) }),
-      });
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-      if (!res.ok) {
-        throw new Error("Failed to fetch recipes from server");
-      }
+    const freshItems = items.filter((item) => {
+      const expiry = new Date(item.expiryDate);
+      expiry.setHours(0, 0, 0, 0);
+      const daysLeft = Math.floor((expiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+      return daysLeft >= 1;
+    });
 
-      const data = await res.json();
-      const recipeText = data.recipe || "No recipe ideas found.";
-      const parsedIdeas = recipeText
-        .split("\n")
-        .map((line: string) => line.trim())
-        .filter((line: string) => line.length > 0);
-      setRecipeIdeas(parsedIdeas);
-    } catch (err: any) {
-      console.error("Error fetching recipes:", err);
-      setError("⚠️ Unable to generate recipes. Please try again later.");
-    } finally {
-      setLoading(false);
+    const excludedCount = items.length - freshItems.length;
+    if (excludedCount > 0) {
+      setExcludedWarning(`Note: ${excludedCount} expired or near-expiry item(s) were excluded from the recipe.`);
     }
+
+    const res = await fetch(RECIPE_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ingredients: freshItems.map((i) => i.name) }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch recipes from server");
+    }
+
+    const data = await res.json();
+    const recipeText = data.recipe || "No recipe ideas found.";
+    const parsedIdeas = recipeText
+      .split("\n")
+      .map((line: string) => line.trim())
+      .filter((line: string) => line.length > 0);
+    setRecipeIdeas(parsedIdeas);
+   } catch (err: any) {
+    console.error("Error fetching recipes:", err);
+    setError("⚠️ Unable to generate recipes. Please try again later.");
+   } finally {
+    setLoading(false);
+   }
   };
+
 
   return (
     <div className="recipesPage">
@@ -104,14 +122,24 @@ const Recipes: React.FC = () => {
         </div>
 
         {error && <p className="errorText">{error}</p>}
+        {excludedWarning && <p className="excludedWarning">{excludedWarning}</p>}
+
 
         {recipeIdeas.length > 0 && (
-             <div className="recipeTextBlock">
-                {recipeIdeas.map((para, index) => (
-                    <p key={index}>{para}</p>
-                ))}
-             </div>
+        <div className="recipeTextBlock">
+            {recipeIdeas.map((para, index) => (
+            <p
+                key={index}
+                dangerouslySetInnerHTML={{
+                __html: para
+                    .replace(/^(Ingredients:)/i, "<strong class='highlightTitle' >$1</strong>")
+                    .replace(/^(Instructions:)/i, "<strong class='highlightTitle'>$1</strong>"),
+                }}
+            />
+            ))}
+        </div>
         )}
+
 
 
         {!loading && recipeIdeas.length === 0 && items.length > 0 && (
