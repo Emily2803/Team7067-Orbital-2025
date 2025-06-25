@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, doc, getDoc, setDoc } from "firebase/firestore";
 import './Auth.css';
 import { auth, db } from "../../firebase";
 
@@ -16,13 +16,28 @@ function UserLogin() {
         try {
             await signInWithEmailAndPassword(auth, email, password);
             alert("Logged in!")
-            navigate("/home");
             const userAcc = auth.currentUser;
             await addDoc(collection(db, "loginRec"), {
                 userID: userAcc?.uid || "",
                 email: userAcc?.email || "",
                 loginTime: serverTimestamp(),
             });
+            if (userAcc) {
+                const userRef = doc(db, "users", userAcc.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (!userSnap.exists() || !userSnap.data()?.email) {
+                    await setDoc(userRef, {
+                        email: userAcc.email,
+                        userId: userAcc.uid,
+                        createdAt: serverTimestamp()
+                    }, { merge: true });
+                    console.log("✅ Email stored in users collection");
+                } else {
+                    console.log("ℹ️ User already has email in users collection");
+                }
+            }
+            navigate("/home");
         } catch (error: any) {
             console.log(error.message);
             alert("Login failure: " + error.message);

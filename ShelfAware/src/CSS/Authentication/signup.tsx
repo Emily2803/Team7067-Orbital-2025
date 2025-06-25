@@ -3,6 +3,8 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../../firebase';
 
 function UserSignUp() {
   const [email, setEmail] = useState('');
@@ -20,6 +22,20 @@ function UserSignUp() {
         displayName: `${firstName} ${lastName}`
       });
       await auth.currentUser?.reload();
+      const user = auth.currentUser;
+
+      if (user) {
+        await setDoc(doc(db, 'users', user.uid), {
+          userId: user.uid,
+          email: user.email,
+          name: user.displayName,
+          dorm: "",
+          allergies: "",
+          preferences: "",
+          createdAt: serverTimestamp()
+        });
+        console.log("✅ User profile stored in Firestore");
+      }
       navigate('/home');
     } catch (error: any) {
       alert(error.message);
