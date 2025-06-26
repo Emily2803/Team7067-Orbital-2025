@@ -20,6 +20,7 @@ function UserLogin() {
             await addDoc(collection(db, "loginRec"), {
                 userID: userAcc?.uid || "",
                 email: userAcc?.email || "",
+                displayName: userAcc?.displayName || "",
                 loginTime: serverTimestamp(),
             });
             if (userAcc) {
