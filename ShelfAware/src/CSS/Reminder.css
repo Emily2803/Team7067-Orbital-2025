@@ -11,17 +11,23 @@
 }
 
 .backBut {
-  background: none;
+  background-color: white;
   border: none;
   color: #2e7d32;
+  padding: 10px 20px;
+  border-radius: 999px;
   font-weight: 600;
-  font-size: 1rem;
   cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .backBut:hover {
+  background-color: #2e7d32;
+  color: white;
   text-decoration: underline;
 }
+
 .bodyContent {
   flex: 1;
   max-width: 800px;
@@ -89,7 +95,8 @@
   font-size: 1rem;
   color: #6b7280;
   max-width: 600px;
-  margin: auto;
+  margin-top: 1rem;
+  margin-bottom: 0;
   line-height: 1.6;
 }
 

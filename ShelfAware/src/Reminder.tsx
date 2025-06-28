@@ -76,8 +76,8 @@ const ReminderEnabling: React.FC = () => {
           items expiring in 3 days.
         </p>
       </div>
+      <Footer />
     </div>
-    <Footer />
   </>
   );
 };
