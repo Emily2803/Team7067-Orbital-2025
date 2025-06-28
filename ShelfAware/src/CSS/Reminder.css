@@ -1,0 +1,101 @@
+.reminderPage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f9fdfa;
+  font-family: "Inter", sans-serif;
+}
+
+.topSide {
+  padding: 2rem 4rem 0;
+}
+
+.backBut {
+  background: none;
+  border: none;
+  color: #2e7d32;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.backBut:hover {
+  text-decoration: underline;
+}
+.bodyContent {
+  flex: 1;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.titleHeading {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #2e7d32;
+  margin-bottom: 0.5rem;
+}
+
+.descriptionNote {
+  font-size: 1.2rem;
+  color: #4b5563;
+  margin-bottom: 2rem;
+}
+
+.buttonArea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.enableChecker{
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.enableButton {
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.enableOn {
+  background-color: #22c55e;
+  color: white;
+}
+
+.enableOff {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+.enableButton:hover {
+  opacity: 0.9;
+}
+
+.shortNote {
+  font-size: 1rem;
+  color: #6b7280;
+  max-width: 600px;
+  margin: auto;
+  line-height: 1.6;
+}
+
+.contentWrapper {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
