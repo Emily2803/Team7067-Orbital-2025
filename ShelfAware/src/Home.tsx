@@ -84,6 +84,10 @@ const Home: React.FC = () => {
         🥕 <strong>Food Exchange</strong>
         <p>Share surplus ingredients with others and reduce waste.</p>
       </div>
+      <div className="feature-card" onClick={() => navigate("/chat")}>
+        💬 <strong>Chats</strong>
+        <p>Communicate with others for food claims or donations</p>
+      </div>
       <div className="feature-card" onClick={() => navigate("/progress")}>
         ⭐️ <strong>Achievements & Progress</strong>
         <p>Track your sustainability milestones and pantry usage streaks.</p>

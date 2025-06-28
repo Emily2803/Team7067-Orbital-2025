@@ -239,6 +239,13 @@ export default function PantryPage() {
                     <div className="buttonBar" style={{ justifyContent: "space-between" }}>
                       <button className="btn consumed" onClick={() => handleConsume(item)}> Consumed</button>
                       <button className="btn edit" onClick={() => startEdit(item)}> Edit</button>
+                      <button className={`btn donate ${daysLeft < 0 ? 'unavailable' : ''}`}
+                        disabled={daysLeft < 0}
+                        onClick={() => {
+                          if (daysLeft >= 0) {
+                            navigate("/exchange", { state: { item } });
+                          }
+                        }}>Donate</button>
                       <button className="btn remove" onClick={() => handleDelete(item.id)}> Remove</button>
                     </div>
                   </div>

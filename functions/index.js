@@ -54,6 +54,12 @@ exports.sendExpiryEmails = onSchedule(
             userItems.set(eachData.userId, userLs);
         });
         for (const [userId, items ] of userItems.entries()) {
+            const userDoc = await database.collection("users").doc(userId).get();
+            if (!userDoc.exists || userDoc.data().notificationsEnabled === false) {
+                console.log(`Skipping user ${userId} - notifications disabled.`);
+                continue;
+            }
+            
             const loginSnap = await database
                 .collection("loginRec")
                 .where("userID", "==", userId)
@@ -85,7 +91,7 @@ exports.sendExpiryEmails = onSchedule(
                     <ul>${listItem}</ul>
                     <p>Click below to check on your pantry now:</p>
                     <p>
-                        <a href="https://shelfaware-110f0.web.app" target="_blank" 
+                        <a href="https://shelfaware-110f0.web.app/" target="_blank" 
                             style="${shelfBtn}">
                             Go to ShelfAware
                         </a>

@@ -193,7 +193,7 @@ body {
 
 .buttonBar .btn {
   flex: 1;
-  padding: 10px 0;
+  padding: 10px 0px;
   font-size: 0.85rem;
   font-family: 'Outfit', sans-serif;
   font-weight: 500;
@@ -227,6 +227,26 @@ body {
 }
 .btn.remove:hover {
   background-color: #ffecec;
+}
+
+.btn.donate {
+  color: #f57c00;
+}
+
+.btn.donate:hover {
+  background-color: #ffe0b2;
+}
+
+.btn.unavailable {
+  color: #aaa;
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+
+.btn.consumed:hover {
+  background-color: #ffe0b2;
 }
 
 .popupOverlay {
