@@ -117,4 +117,33 @@
   transform: translateY(-9%);
 }
 
+.profile-picture {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin: 1rem auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.upload-label {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: #3b7e3b;
+  color: white !important;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 1rem 0;
+  transition: background 0.3s ease;
+  text-align: center;
+}
+
+.upload-label:hover {
+  background-color: #2f6b2f;
+}
+
 

@@ -184,7 +184,7 @@
     "filter-obj": "^1.1.0",
     "finalhandler": "^1.1.2",
     "find-up": "^5.0.0",
-    "firebase": "^11.8.1",
+    "firebase": "^11.9.1",
     "firebase-admin": "^13.4.0",
     "flat-cache": "^4.0.1",
     "flatted": "^3.3.3",

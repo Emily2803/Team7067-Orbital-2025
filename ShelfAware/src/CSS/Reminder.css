@@ -1,25 +1,39 @@
+
 .reminderPage {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background-color: #f9fdfa;
-  font-family: "Inter", sans-serif;
+  font-family: "Outfit", sans-serif;
+}
+
+.contentWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6rem 1.5rem 2rem;
 }
 
 .topSide {
-  padding: 2rem 4rem 0;
+  position: absolute;
+  top: 2rem;
+  left: 3rem;
+  z-index: 10;
 }
 
 .backBut {
   background-color: white;
   border: none;
   color: #2e7d32;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
   padding: 10px 20px;
   border-radius: 999px;
   font-weight: 600;
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  transition: all 0.25s ease;
+  white-space: nowrap;
 }
 
 .backBut:hover {
@@ -29,28 +43,22 @@
 }
 
 .bodyContent {
-  flex: 1;
+  text-align: center;
   max-width: 800px;
   width: 100%;
-  margin: 0 auto;
-  padding: 2rem 4rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
 }
 
 .titleHeading {
   font-size: 2.5rem;
   font-weight: 800;
   color: #2e7d32;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
 }
 
 .descriptionNote {
-  font-size: 1.2rem;
-  color: #4b5563;
-  margin-bottom: 2rem;
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1.5rem;
 }
 
 .buttonArea {
@@ -62,23 +70,24 @@
   flex-wrap: wrap;
 }
 
-.enableChecker{
+.enableChecker {
   font-size: 1.2rem;
   font-weight: 600;
+  color: #333;
 }
 
 .enableButton {
-  padding: 0.75rem 2rem;
+  padding: 0.8rem 2rem;
   border-radius: 9999px;
   font-weight: 700;
   font-size: 1rem;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: 0.3s ease;
 }
 
 .enableOn {
-  background-color: #22c55e;
+  background-color: #43a047;
   color: white;
 }
 
@@ -88,21 +97,21 @@
 }
 
 .enableButton:hover {
-  opacity: 0.9;
+  transform: scale(1.05);
+  opacity: 0.95;
 }
 
 .shortNote {
-  font-size: 1rem;
-  color: #6b7280;
+  font-size: 0.95rem;
+  color: #777;
   max-width: 600px;
-  margin-top: 1rem;
-  margin-bottom: 0;
+  margin: 0 auto;
   line-height: 1.6;
+  font-style: italic;
+  text-align: center;
 }
 
-.contentWrapper {
-  max-width: 800px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+
+footer {
+  margin-top: auto;
 }

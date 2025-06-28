@@ -1,10 +1,12 @@
 .recipesPage {
+  position: relative; 
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background: #f9fdfb;
   font-family: 'Outfit', sans-serif;
 }
+
 
 .contentWrapper {
   flex: 1;
@@ -14,10 +16,11 @@
 }
 
 .topNav {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 1rem;
+  position: absolute;
+  top: 2rem;
+  left: 3rem;
 }
+
 
 .backBtn {
   background: none;
@@ -35,6 +38,7 @@
 .recipesHeader {
   text-align: center;
   margin-bottom: 2rem;
+  padding-top: 2rem;
 }
 
 .recipeTextBlock {
