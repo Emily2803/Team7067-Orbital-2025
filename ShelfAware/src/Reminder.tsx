@@ -49,20 +49,20 @@ const ReminderEnabling: React.FC = () => {
         <div className="bodyContent">
           <h1 className="titleHeading">Expiry Notifications ⏰</h1>
           <p className="descriptionNote">
-            Get alerted for your pantry's expiry food!
+            Get alerted for your pantry's expiring food!
           </p>
 
           {processing ? (
             <p>Processing...</p>
           ) : (
             <div className="buttonArea">
+              <div className="switchContainer">
               <span className="enableChecker">Email Reminders:</span>
-              <button
-                onClick={toggleNotification}
-                className={`enableButton ${onReminder ? "enableOn" : "enableOff"}`}
-              >
-                {onReminder ? "ON 🔔" : "OFF 🔕"}
-              </button>
+              <label className="switch">
+                <input type="checkbox" checked={onReminder} onChange={toggleNotification} />
+                <span className="slider"></span>
+              </label>
+            </div>
             </div>
           )}
 
