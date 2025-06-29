@@ -260,7 +260,7 @@ const handleEdit = (post: ForumPosts) => {
                                                     <button  onClick={() => handleDelete(posts)}>Delete</button>
                                                 </>
                                             )}
-                                            <button onClick={() => navigate(`/chats`)}>Contact</button>
+                                            <button onClick={() => navigate(`/chat`)}>Contact</button>
                                         </div>
                                     </div>
                                 </div>

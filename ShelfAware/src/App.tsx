@@ -11,6 +11,8 @@ import ChangePassword from "./ChangePassword";
 import Recipes from './Recipes';
 import ReminderEnabling from "./Reminder";
 import CommunityPage from "./CommunityPage";
+import Achievements from './Achievement';
+import Chats from './ChatPage';
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
             <Route path="/recipes" element={<Recipes />} />
             <Route path="/notifications" element={<ReminderEnabling />} />
             <Route path="/exchange" element={<CommunityPage />} />
+            <Route path="/progress" element={<Achievements />}  />
+            <Route path="/chat" element={<Chats />} />
           </Routes>
         </div>
       </Router>
