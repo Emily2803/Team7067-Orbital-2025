@@ -254,12 +254,12 @@ const handleEdit = (post: ForumPosts) => {
                                         </div>
                                         <div className="postButtons">
                                             {auth.currentUser?.uid === posts.userId && (
-                                                <button onClick={() => handleDonate(posts)}> Claim 1</button>
-                                            )}
                                                 <>
+                                                    <button onClick={() => handleDonate(posts)}> Claim 1</button>
                                                     <button onClick={() => handleEdit(posts)}>Edit</button>
                                                     <button  onClick={() => handleDelete(posts)}>Delete</button>
                                                 </>
+                                            )}
                                             <button onClick={() => navigate(`/chats`)}>Contact</button>
                                         </div>
                                     </div>
