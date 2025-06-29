@@ -52,7 +52,7 @@ const Home: React.FC = () => {
 
   <div className="main-content">
     <div className="title-row">
-      <h1 className="title">ShelfAware</h1>
+      <h1 className="title"> ShelfAware</h1>
       <img src={FoodGif} alt="Pantry gif" className="title-gif" />
     </div>
     <p className="subtitle">

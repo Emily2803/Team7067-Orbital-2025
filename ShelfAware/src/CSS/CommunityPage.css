@@ -75,22 +75,52 @@
   flex-direction: column;
   gap: 1rem;
   font-family: 'Outfit', sans-serif;
+  font-style: normal;
+}
+
+.postStyle label {
+  font-weight: 600;
+  color: #222;
+  font-size: 0.95rem;
 }
 
 .postStyle input,
 .postStyle textarea,
+.postStyle select,
+.postStyle button {
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.postStyle input[type="text"],
+.postStyle input[type="number"],
+.postStyle input[type="date"],
+.postStyle textarea,
 .postStyle select {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
   width: 100%;
   box-sizing: border-box;
 }
 
+.postStyle input:focus,
+.postStyle textarea:focus,
+.postStyle select:focus {
+  border-color: #2e7d32;
+  outline: none;
+}
+
+.postStyle input::placeholder,
+.postStyle textarea::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
 .postStyle textarea {
+  min-height: 60px;
+  max-height: 150px;
   resize: vertical;
-  min-height: 80px;
 }
 
 .postStyle button {

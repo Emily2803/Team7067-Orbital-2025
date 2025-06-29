@@ -47,7 +47,7 @@ const ReminderEnabling: React.FC = () => {
 
       <div className="contentWrapper">
         <div className="bodyContent">
-          <h1 className="titleHeading">Expiry Notifications ⏰</h1>
+          <h1 className="titleHeading"> Expiry Notifications ⏰ </h1>
           <p className="descriptionNote">
             Get alerted for your pantry's expiring food!
           </p>

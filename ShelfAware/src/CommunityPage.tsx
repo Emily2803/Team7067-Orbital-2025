@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { auth, db, storage } from "./firebase";
+import { auth, db,} from "./firebase";
 import {
   addDoc,
   deleteDoc,
@@ -11,7 +11,6 @@ import {
   query,
   Timestamp,
 } from "firebase/firestore";
-import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import "./CSS/CommunityPage.css";
 import Footer from "./Footer";
@@ -108,7 +107,7 @@ export default function CommunityPage() {
         quantity: newPost.quantity,
         expiryDate: Timestamp.fromDate(new Date(newPost.expiryDate)),
         location: newPost.location,
-        foodPic: imageUrl, // ✅ correct final value
+        foodPic: imageUrl, 
     };
 
     if (editingPost) {
@@ -186,7 +185,7 @@ const handleEdit = (post: ForumPosts) => {
     <div className="communityPage">
       <div className="communityContentWrapper">
       <button className="backBut" onClick={() => navigate(-1)}>Back</button>
-        <h1>Community Food Sharing 🍲</h1>
+        <h1>𝜗ৎCommunity Food Sharing⋆₊˚🍲</h1>
          <p className="communityCaption">
             Share surplus food with your campus community and reduce waste together! 🌱
          </p>
@@ -271,76 +270,92 @@ const handleEdit = (post: ForumPosts) => {
             </div>
         <div className="addPost">
             <form onSubmit={handleAdd} className="postStyle">
-                <h3>Add Post</h3>
-                <input
-                    type = "text"
-                    placeholder = "Food Name"
-                    value = {newPost.foodName}
-                    onChange = {(e) => setNewPost({ ...newPost, foodName: e.target.value })}
-                    required
-                />
-                <textarea placeholder = "Description"
-            value = {newPost.description}
-                    onChange = {(e) => setNewPost({ ...newPost, description: e.target.value })}
-                />
-                <input
-                    type="date"
-                    value={newPost.expiryDate}
-                    onChange={(e) => setNewPost({ ...newPost, expiryDate: e.target.value })}
-                    required
-                />
-                <select
-                    value={newPost.location}
-                    onChange={(e) => setNewPost({ ...newPost, location: e.target.value })}
-                    required>
-                    <option value="">Select Dorm</option>
-                    <option value="PGP">PGP</option>
-                    <option value="UTown">UTown</option>
-                    <option value="Tembusu">Tembusu</option>
-                    <option value="CAPT">CAPT</option>
-                    <option value="RC4">RC4</option>
-                    <option value="RVRC">RVRC</option>
-                    <option value="Kent Ridge Hall">Kent Ridge Hall</option>
-                    <option value="Eusoff Hall">Eusoff Hall</option>
-                    <option value="King Edward VII Hall">King Edward VII Hall</option>
-                    <option value="Temasek Hall">Temasek Hall</option>
-                    <option value="Sheares Hall">Sheares Hall</option>
-                    <option value="Raffles Hall">Raffles Hall</option>
-                </select>
+            <h3>{editingPost ? "Edit Post" : "Add Post"}</h3>
 
-                <input
-                    type="number"
-                    min={1}
-                    value={newPost.quantity}
-                    onChange={(e) => setNewPost({ ...newPost, quantity: Number(e.target.value) })}
-                    required
-                />
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setPhoto(e.target.files?.[0] || null)}
-                />
-                <button type="submit">Post</button>
-                {editingPost && (
-                    <button
-                        type="button"
-                        className="cancelEditBtn"
-                        onClick={() => {
-                            setEdit(null);
-                            setNewPost({
-                                foodName:"",
-                                description: "",
-                                expiryDate: "",
-                                quantity: 1,
-                                location: "",
-                            });
-                            setPhoto(null);
-                            setPhotoUrl("");
-                            setOriPic("");
-                        }}
-                    >Cancel Edit
-                    </button>
-                )}
+            <label>Food Name</label>
+            <input
+                type="text"
+                placeholder="e.g. Bread, Milk, Eggs"
+                value={newPost.foodName}
+                onChange={(e) => setNewPost({ ...newPost, foodName: e.target.value })}
+                required
+            />
+
+            <label>Description</label>
+            <textarea
+                placeholder="Optional comments"
+                value={newPost.description}
+                onChange={(e) => setNewPost({ ...newPost, description: e.target.value })}
+            />
+
+            <label>Expiry Date</label>
+            <input
+                type="date"
+                value={newPost.expiryDate}
+                onChange={(e) => setNewPost({ ...newPost, expiryDate: e.target.value })}
+                required
+            />
+
+            <label>Dorm Location</label>
+            <select
+                value={newPost.location}
+                onChange={(e) => setNewPost({ ...newPost, location: e.target.value })}
+                required
+            >
+                <option value="">Select Dorm</option>
+                <option value="PGP">PGP</option>
+                <option value="UTown">UTown</option>
+                <option value="Tembusu">Tembusu</option>
+                <option value="CAPT">CAPT</option>
+                <option value="RC4">RC4</option>
+                <option value="RVRC">RVRC</option>
+                <option value="Kent Ridge Hall">Kent Ridge Hall</option>
+                <option value="Eusoff Hall">Eusoff Hall</option>
+                <option value="King Edward VII Hall">King Edward VII Hall</option>
+                <option value="Temasek Hall">Temasek Hall</option>
+                <option value="Sheares Hall">Sheares Hall</option>
+                <option value="Raffles Hall">Raffles Hall</option>
+            </select>
+
+            <label>Quantity</label>
+            <input
+                type="number"
+                min={1}
+                value={newPost.quantity}
+                onChange={(e) => setNewPost({ ...newPost, quantity: Number(e.target.value) })}
+                required
+            />
+
+            <label>Photo</label>
+            <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setPhoto(e.target.files?.[0] || null)}
+            />
+
+            <button type="submit">{editingPost ? "Update" : "Post"}</button>
+
+            {editingPost && (
+                <button
+                type="button"
+                className="cancelEditBtn"
+                onClick={() => {
+                    setEdit(null);
+                    setNewPost({
+                    foodName: "",
+                    description: "",
+                    expiryDate: "",
+                    quantity: 1,
+                    location: "",
+                    });
+                    setPhoto(null);
+                    setPhotoUrl("");
+                    setOriPic("");
+                }}
+                >
+                Cancel Edit
+                </button>
+            )}
             </form>
             </div>
             </div>
