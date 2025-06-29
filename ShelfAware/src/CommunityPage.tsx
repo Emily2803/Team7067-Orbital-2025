@@ -12,9 +12,11 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import "./CSS/CommunityPage.css";
+import Footer from "./Footer";
+
+const UPLOADCARE_PUBLIC_KEY = "1c6044eae7f09b3a5c87";
 
 interface ForumPosts {
     postId: string;
@@ -41,6 +43,7 @@ export default function CommunityPage() {
     location: "",
   });
   const [photo, setPhoto] = useState<File | null>(null);
+  const [photoUrl, setPhotoUrl] = useState("");
   const [editingPost, setEdit] = useState<string | null>(null);
   const [oriPic, setOriPic] = useState("");
   const navigate = useNavigate();
@@ -66,57 +69,72 @@ export default function CommunityPage() {
     });
     return () => uncheck();
   }, []);
+  
+  const handleImageUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append("UPLOADCARE_PUB_KEY", UPLOADCARE_PUBLIC_KEY);
+    formData.append("file", file);
+
+    const res = await fetch("https://upload.uploadcare.com/base/", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+    if (data && data.file) {
+      return `https://ucarecdn.com/${data.file}/`;
+    } else {
+      alert("Failed to upload image.");
+      return "";
+    }
+  };
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
     const existUser = auth.currentUser;
     if (!existUser || newPost.foodName.trim() === "") return;
+
     try {
-        let foodStr = "";
-        if (photo) {
-            const picCollection = ref(storage, `communityPosts/${uuidv4()}`);
-            await uploadBytes(picCollection, photo);
-            foodStr = await getDownloadURL(picCollection);
-        }
-
-        const postDetails = {
-            userId: existUser.uid,
-            userName: existUser.displayName || "Anonymous",
-            foodName: newPost.foodName,
-            description: newPost.description,
-            quantity: newPost.quantity,
-            expiryDate: Timestamp.fromDate(new Date(newPost.expiryDate)),
-            location: newPost.location,
-            foodPic: photo ? foodStr : oriPic,
-        };
-
-        if (editingPost) {
-            const postRecord = doc(db, "forumPosts", editingPost);
-            await updateDoc(postRecord, postDetails);
-            alert("Edited post!")
-        } else {
-            await addDoc(collection(db, "forumPosts"), {
-                ...postDetails,
-                foodPic: foodStr,
-            });
-            alert("Post added!");
-        }
-
-        setNewPost({
-            foodName: "",
-            description: "",
-            expiryDate: "",
-            quantity: 1,
-            location: "",
-        });
-
-        setPhoto(null);
-        setEdit(null);
-        setOriPic("");
-    } catch (err) {
-        console.error("Submit Error", err);
+    let imageUrl = oriPic;
+    if (photo) {
+        imageUrl = await handleImageUpload(photo); 
     }
-  };
+
+    const postDetails = {
+        userId: existUser.uid,
+        userName: existUser.displayName || "Anonymous",
+        foodName: newPost.foodName,
+        description: newPost.description,
+        quantity: newPost.quantity,
+        expiryDate: Timestamp.fromDate(new Date(newPost.expiryDate)),
+        location: newPost.location,
+        foodPic: imageUrl, // ✅ correct final value
+    };
+
+    if (editingPost) {
+        await updateDoc(doc(db, "forumPosts", editingPost), postDetails);
+        alert("Edited post!");
+    } else {
+        await addDoc(collection(db, "forumPosts"), postDetails);
+        alert("Post added!");
+    }
+
+    setNewPost({
+      foodName: "",
+      description: "",
+      expiryDate: "",
+      quantity: 1,
+      location: "",
+    });
+    setPhoto(null);
+    setPhotoUrl("");
+    setEdit(null);
+    setOriPic("");
+  } catch (err) {
+    console.error("Submit Error", err);
+  }
+};
+
 
   const handleDonate = async (post: ForumPosts) => {
     if (post.quantity > 1) {
@@ -146,6 +164,7 @@ const handleEdit = (post: ForumPosts) => {
   });
   setOriPic(post.foodPic || "");
   setPhoto(null);
+  setPhotoUrl("");
   setEdit(post.postId);
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
@@ -165,7 +184,8 @@ const handleEdit = (post: ForumPosts) => {
 
   return (
     <div className="communityPage">
-        <button className="backBut" onClick={() => navigate(-1)}>Back</button>
+      <div className="communityContentWrapper">
+      <button className="backBut" onClick={() => navigate(-1)}>Back</button>
         <h1>Community Food Sharing 🍲</h1>
         <div className="communityContent">
             <div className="postList">
@@ -231,7 +251,7 @@ const handleEdit = (post: ForumPosts) => {
                                         </div>
                                         <div className="postButtons">
                                             {auth.currentUser?.uid === posts.userId && (
-                                                <button onClick={() => handleDonate(posts)}>✅ Claim 1</button>
+                                                <button onClick={() => handleDonate(posts)}> Claim 1</button>
                                             )}
                                                 <>
                                                     <button onClick={() => handleEdit(posts)}>Edit</button>
@@ -312,6 +332,7 @@ const handleEdit = (post: ForumPosts) => {
                                 location: "",
                             });
                             setPhoto(null);
+                            setPhotoUrl("");
                             setOriPic("");
                         }}
                     >Cancel Edit
@@ -320,6 +341,8 @@ const handleEdit = (post: ForumPosts) => {
             </form>
             </div>
             </div>
+            </div>
+              <Footer />
             </div>
   );
 }

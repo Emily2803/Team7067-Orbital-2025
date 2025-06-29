@@ -1,10 +1,16 @@
 .communityPage {
   min-height: 100vh;
   width: 100vw;
-  padding: 2rem;
   font-family: 'Outfit', sans-serif;
   background-color: #f9fdfb;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.communityContentWrapper {
+  flex: 1;
+  padding: 2rem;
 }
 
 .communityPage h1 {
@@ -132,10 +138,10 @@
 
 .postButtons {
   display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
   flex-wrap: wrap;
-  margin-top: auto;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
   align-items: center;
 }
 
@@ -144,19 +150,22 @@
   background-color: #4caf50;
   color: white;
   border: none;
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  min-width: 75px;
-  height: 38px;
+  min-width: 90px;
+  height: 40px;
   transition: background 0.2s ease;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .postButtons button:hover {
   background-color: #388e3c;
 }
+
 
 .postCard {
   background: #fff;
@@ -284,4 +293,19 @@
 
 .cancelEditBtn:hover {
   background-color: #757575;
+}
+
+.noImage {
+  width: 280px;
+  height: 280px;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-weight: 500;
+  font-size: 1rem;
+  flex-shrink: 0;
+  text-align: center;
 }
