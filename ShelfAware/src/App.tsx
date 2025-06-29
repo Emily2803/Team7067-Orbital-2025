@@ -10,6 +10,7 @@ import ProfilePage from "./profilePage";
 import ChangePassword from "./ChangePassword";
 import Recipes from './Recipes';
 import ReminderEnabling from "./Reminder";
+import CommunityPage from "./CommunityPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/changepassword" element={<ChangePassword />} />
             <Route path="/recipes" element={<Recipes />} />
             <Route path="/notifications" element={<ReminderEnabling />} />
+            <Route path="/exchange" element={<CommunityPage />} />
           </Routes>
         </div>
       </Router>

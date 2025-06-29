@@ -1,0 +1,285 @@
+.communityPage {
+  min-height: 100vh;
+  width: 100vw;
+  padding: 2rem;
+  font-family: 'Outfit', sans-serif;
+  background-color: #f9fdfb;
+  box-sizing: border-box;
+}
+
+.communityPage h1 {
+  text-align: center;
+  color: #2e7d32;;
+  margin-bottom: 2rem;
+}
+
+.backBut {
+    background-color: white;
+    border: none;
+    color: #2e7d32;
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+
+.backBut:hover {
+    background-color: #2e7d32;
+    color: white;
+    text-decoration: underline;
+}
+
+.communityContent {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.postList {
+  flex: 2;
+}
+
+.addPost {
+  flex: 1;
+  background: #e8f5e9;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 2rem;
+  align-self: stretch;
+  height: 100%;
+}
+
+.postStyle {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-family: 'Outfit', sans-serif;
+}
+
+.postStyle input,
+.postStyle textarea,
+.postStyle select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.postStyle textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.postStyle button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.postStyle button:hover {
+  background-color: #388e3c;
+}
+
+.searchFilterSort {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.searchBar,
+.filter,
+.sort {
+    height: 45px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    font-family: "Outfit", sans-serif;
+    box-sizing: border-box;
+}
+
+.searchBar {
+    flex: 2;
+    min-width: 250px;
+}
+
+.filter {
+    flex: 1;
+    min-width: 160px;
+}
+
+.postItems {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.postButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: auto;
+  align-items: center;
+}
+
+.postButtons button {
+  font-family: 'Outfit', sans-serif;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-width: 75px;
+  height: 38px;
+  transition: background 0.2s ease;
+}
+
+.postButtons button:hover {
+  background-color: #388e3c;
+}
+
+.postCard {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  min-height: 250px;
+}
+
+.postPhoto {
+  width: 280px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.cardDescription {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.cardLeft {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+
+.cardRight {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.descriptionBox {
+  background-color: #f1f8e9;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #333;
+  width: 400px;
+  height: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.descriptionBox {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 1.15rem;
+}
+
+.usernamePost {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #2e7d32;
+  margin:0;
+}
+
+.foodNamePost {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0.25rem 0;
+}
+
+.postCard h3 {
+  color: #333;
+  margin: 0.5rem 0;
+}
+
+.postCard p {
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+}
+
+.postCard button {
+  margin-top: 1rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.postCard button:hover {
+  background-color: #45a049;
+}
+
+.noPost {
+  font-style: italic;
+  color: #888;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.cancelEditBtn {
+  background-color: #9e9e9e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.cancelEditBtn:hover {
+  background-color: #757575;
+}

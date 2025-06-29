@@ -240,8 +240,7 @@ export default function PantryPage() {
                       <button className="btn consumed" onClick={() => handleConsume(item)}> Consumed</button>
                       <button className="btn edit" onClick={() => startEdit(item)}> Edit</button>
                       <button className={`btn donate ${daysLeft < 0 ? 'unavailable' : ''}`}
-                        disabled={daysLeft < 0}
-                        onClick={() => {
+                        disabled={daysLeft < 0} onClick={() => {
                           if (daysLeft >= 0) {
                             navigate("/exchange", { state: { item } });
                           }
