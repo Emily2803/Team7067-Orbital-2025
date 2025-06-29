@@ -187,6 +187,9 @@ const handleEdit = (post: ForumPosts) => {
       <div className="communityContentWrapper">
       <button className="backBut" onClick={() => navigate(-1)}>Back</button>
         <h1>Community Food Sharing 🍲</h1>
+         <p className="communityCaption">
+            Share surplus food with your campus community and reduce waste together! 🌱
+         </p>
         <div className="communityContent">
             <div className="postList">
                 <div className = "searchFilterSort">
@@ -221,8 +224,8 @@ const handleEdit = (post: ForumPosts) => {
                         onChange={(e) => setDate(e.target.value)}
                         className="sort"
                     >
-                        <option value="latest">Sort by Latest</option>
-                        <option value="oldest">Sort by Oldest</option>
+                        <option value="latest">Expiring Last</option>
+                        <option value="oldest">Expiring First</option>
                     </select>
                 </div>
 
