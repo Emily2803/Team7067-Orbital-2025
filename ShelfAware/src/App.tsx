@@ -13,6 +13,7 @@ import ReminderEnabling from "./Reminder";
 import CommunityPage from "./CommunityPage";
 import Achievements from './Achievement';
 import Chats from './ChatPage';
+import ViewProfile from './ViewProfile';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/exchange" element={<CommunityPage />} />
             <Route path="/progress" element={<Achievements />}  />
             <Route path="/chat" element={<Chats />} />
+            <Route path="/viewprofile/:userId" element={<ViewProfile />} />
           </Routes>
         </div>
       </Router>

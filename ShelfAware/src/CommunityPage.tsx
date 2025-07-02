@@ -93,6 +93,15 @@ export default function CommunityPage() {
     const existUser = auth.currentUser;
     if (!existUser || newPost.foodName.trim() === "") return;
 
+    const selectedDate = new Date(newPost.expiryDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); 
+
+    if (selectedDate < today) {
+    alert("Please select an expiry date that is today or later.");
+    return;
+    }
+    
     try {
     let imageUrl = oriPic;
     if (photo) {
@@ -105,7 +114,7 @@ export default function CommunityPage() {
         foodName: newPost.foodName,
         description: newPost.description,
         quantity: newPost.quantity,
-        expiryDate: Timestamp.fromDate(new Date(newPost.expiryDate)),
+        expiryDate: Timestamp.fromDate(selectedDate),
         location: newPost.location,
         foodPic: imageUrl, 
     };
@@ -241,7 +250,15 @@ const handleEdit = (post: ForumPosts) => {
                                 )}
                                 <div className="cardDescription">  
                                     <div className="cardLeft"> 
-                                        <p className="usernamePost">@{posts.userName}</p>
+                                        <p
+                                        className="usernamePost"
+                                        title="View Profile"
+                                        onClick={() => navigate(`/viewprofile/${posts.userId}`)}
+                                        style={{ cursor: "pointer", textDecoration: "underline" }}
+                                        >
+                                        @{posts.userName}
+                                        </p>
+
                                         <h3 className="foodNamePost">{posts.foodName}</h3>
                                         <p>Expires: {new Date(posts.expiryDate).toLocaleDateString()}</p>
                                         <p>Location: {posts.location}</p>
