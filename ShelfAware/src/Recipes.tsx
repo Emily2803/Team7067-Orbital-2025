@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "./firebase";
+import { doc, getDoc} from 'firebase/firestore';
 import {
   collection,
   query,
@@ -27,6 +28,9 @@ const Recipes: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [excludedWarning, setExcludedWarning] = useState("");
+  const [preferences, setPreferences] = useState('');
+  const [allergies, setAllergies] = useState('');
+
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -46,6 +50,19 @@ const Recipes: React.FC = () => {
           });
           setItems(data);
         });
+        
+        const fetchUserPreferences = async () => {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setPreferences(userData.preferences || '');
+          setAllergies(userData.allergies || '');
+        }
+      };
+
+      fetchUserPreferences();
+        
+
       } else {
         navigate("/login");
       }
@@ -61,6 +78,17 @@ const Recipes: React.FC = () => {
   setExcludedWarning("");
 
   try {
+    const user = auth.currentUser;
+    if (!user) {
+      setError("User not authenticated.");
+      return;
+    }
+    
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    const userData = userDoc.exists() ? userDoc.data() : {};
+    const preferences = userData.preferences || "";
+    const allergies = userData.allergies || "";
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -79,7 +107,10 @@ const Recipes: React.FC = () => {
     const res = await fetch(RECIPE_API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ingredients: freshItems.map((i) => i.name) }),
+      body: JSON.stringify({ ingredients: freshItems.map((i) => i.name),
+        preferences,
+        allergies,
+       }),
     });
 
     if (!res.ok) {
@@ -89,7 +120,7 @@ const Recipes: React.FC = () => {
     const data = await res.json();
     const recipeText = data.recipe || "No recipe ideas found.";
     const parsedIdeas = recipeText
-      .split("\n")
+      .split(/(?=Recipe \d+:)/i)
       .map((line: string) => line.trim())
       .filter((line: string) => line.length > 0);
     setRecipeIdeas(parsedIdeas);
@@ -123,24 +154,31 @@ const Recipes: React.FC = () => {
 
         {error && <p className="errorText">{error}</p>}
         {excludedWarning && <p className="excludedWarning">{excludedWarning}</p>}
-
+        {preferences && <p className="note">⚙️ Preferences considered: {preferences}</p>}
+        {allergies && <p className="note">⚠️ Allergies avoided: {allergies}</p>}
 
         {recipeIdeas.length > 0 && (
         <div className="recipeTextBlock">
-            {recipeIdeas.map((para, index) => (
-            <p
-                key={index}
-                dangerouslySetInnerHTML={{
-                __html: para
-                    .replace(/^(Ingredients:)/i, "<strong class='highlightTitle' >$1</strong>")
-                    .replace(/^(Instructions:)/i, "<strong class='highlightTitle'>$1</strong>"),
-                }}
-            />
-            ))}
+            {recipeIdeas.map((block, index) => {
+              const lines = block.split("\n").filter((line) => line.trim() !== "");
+              return (
+              <div key={index} className="recipeBlock">
+                {lines.map((line, i) => (
+                  <p
+                      key={i}
+                      dangerouslySetInnerHTML={{
+                      __html: line
+                          .replace(/^(Recipe \d+:)/i, "<strong class='recipeTitle'>$1</strong>")
+                          .replace(/^(Ingredients:)/i, "<strong class='highlightTitle' >$1</strong>")
+                          .replace(/^(Instructions:)/i, "<strong class='highlightTitle'>$1</strong>"),
+                      }}
+                  />
+                ))}
+              </div>
+            );
+          })}
         </div>
         )}
-
-
 
         {!loading && recipeIdeas.length === 0 && items.length > 0 && (
           <p className="noIdeas">Click "Suggest Recipes" to generate ideas.</p>

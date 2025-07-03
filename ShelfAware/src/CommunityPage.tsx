@@ -42,7 +42,6 @@ export default function CommunityPage() {
     location: "",
   });
   const [photo, setPhoto] = useState<File | null>(null);
-  const [photoUrl, setPhotoUrl] = useState("");
   const [editingPost, setEdit] = useState<string | null>(null);
   const [oriPic, setOriPic] = useState("");
   const navigate = useNavigate();
@@ -135,7 +134,6 @@ export default function CommunityPage() {
       location: "",
     });
     setPhoto(null);
-    setPhotoUrl("");
     setEdit(null);
     setOriPic("");
   } catch (err) {
@@ -172,7 +170,6 @@ const handleEdit = (post: ForumPosts) => {
   });
   setOriPic(post.foodPic || "");
   setPhoto(null);
-  setPhotoUrl("");
   setEdit(post.postId);
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
@@ -226,6 +223,7 @@ const handleEdit = (post: ForumPosts) => {
                         <option value="Temasek Hall">Temasek Hall</option>
                         <option value="Sheares Hall">Sheares Hall</option>
                         <option value="Raffles Hall">Raffles Hall</option>
+                        <option value="Valour House">Valour House</option>
                     </select>
                     <select
                         value={sortDate}
@@ -332,6 +330,7 @@ const handleEdit = (post: ForumPosts) => {
                 <option value="Temasek Hall">Temasek Hall</option>
                 <option value="Sheares Hall">Sheares Hall</option>
                 <option value="Raffles Hall">Raffles Hall</option>
+                <option value="Valour House">Valour House</option>
             </select>
 
             <label>Quantity</label>
@@ -366,7 +365,6 @@ const handleEdit = (post: ForumPosts) => {
                     location: "",
                     });
                     setPhoto(null);
-                    setPhotoUrl("");
                     setOriPic("");
                 }}
                 >

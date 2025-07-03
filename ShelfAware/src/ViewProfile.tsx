@@ -23,7 +23,6 @@ export default function ViewProfile() {
       if (!userId) return;
       const docRef = doc(db, "users", userId);
       const docSnap = await getDoc(docRef);
-      const user = await getDoc(doc(db, "users", userId));
 
       if (docSnap.exists()) {
         setProfile({

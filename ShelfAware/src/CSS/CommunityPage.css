@@ -185,6 +185,8 @@
 }
 
 .postButtons button {
+  flex: 1 1 calc(50% - 0.5rem); 
+  max-width: 140px;            
   font-family: 'Outfit', sans-serif;
   background-color: #4caf50;
   color: white;
@@ -194,7 +196,6 @@
   cursor: pointer;
   font-size: 0.95rem;
   font-weight: 600;
-  min-width: 90px;
   height: 40px;
   transition: background 0.2s ease;
   text-align: center;
@@ -204,6 +205,8 @@
 .postButtons button:hover {
   background-color: #388e3c;
 }
+
+
 
 
 .postCard {
