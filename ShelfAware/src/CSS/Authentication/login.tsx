@@ -33,9 +33,9 @@ function UserLogin() {
                         userId: userAcc.uid,
                         createdAt: serverTimestamp()
                     }, { merge: true });
-                    console.log("✅ Email stored in users collection");
+                    console.log(" Email stored in users collection");
                 } else {
-                    console.log("ℹ️ User already has email in users collection");
+                    console.log(" User already has email in users collection");
                 }
             }
             navigate("/home");

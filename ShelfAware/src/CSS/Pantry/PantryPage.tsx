@@ -83,8 +83,8 @@ export default function PantryPage() {
         return;
       }
 
-      if (inputDate.getFullYear() < 2020) {
-        alert("Expiry date cannot be before the year 2020.");
+      if (inputDate.getFullYear() < 2025) {
+        alert("Expiry date cannot be before the year 2025.");
         return;
       }
     }

@@ -41,6 +41,9 @@ const Home: React.FC = () => {
   <button onClick={() => { setShowDropdown(false); navigate("/profile"); }}>
     Edit Profile
   </button>
+  <button onClick={() => { setShowDropdown(false); navigate("/changeemail"); }}>
+    Change Email
+  </button>
   <button onClick={() => { setShowDropdown(false); navigate("/changepassword"); }}>
     Change Password
   </button>

@@ -65,8 +65,13 @@ export default function ProfilePage() {
     const user = auth.currentUser;
     if (!user) return;
 
-    if (Number(age) < 1) {
-      alert("Age must be at least 1");
+    if (Number(age) < 1 || Number(age) > 199) {
+      alert("Age must be between 1 and 199.");
+      return;
+    }
+
+    if (!displayName.trim()) {
+      alert("Name is required");
       return;
     }
 
@@ -119,6 +124,7 @@ export default function ProfilePage() {
         value={displayName}
         onChange={(e) => setDisplayName(e.target.value)}
         placeholder="Your Name"
+        required
       />
 
       <label>Email</label>
@@ -128,6 +134,7 @@ export default function ProfilePage() {
       <input
         type="number"
         min="1"
+        max="199"
         value={age}
         onChange={(e) => setAge(e.target.value)}
         placeholder="e.g. 21"
@@ -147,7 +154,7 @@ export default function ProfilePage() {
         placeholder="e.g. Vegetarian, No pork"
       />
 
-      <label>Allergies</label>
+      <label>Allergies (Please describe briefly) </label>
       <input
         value={allergies}
         onChange={(e) => setAllergies(e.target.value)}

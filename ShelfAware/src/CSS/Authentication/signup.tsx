@@ -14,13 +14,30 @@ function UserSignUp() {
   const [lastName, setLastName] = useState('');
   const navigate = useNavigate();
 
+  const isStrongPassword = (password: string) =>
+    password.length >= 8 && /[^A-Za-z0-9]/.test(password); // at least one special char
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(email)) {
+      alert("⚠️ Please enter a valid email address.");
+      return;
+    }
+
+    if (!isStrongPassword(password)) {
+      alert(" Password must be at least 8 characters and include a special character.");
+      return;
+    }
+
     try {
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCred.user, {
         displayName: `${firstName} ${lastName}`
       });
+
       await auth.currentUser?.reload();
       const user = auth.currentUser;
 
@@ -36,9 +53,22 @@ function UserSignUp() {
         });
         console.log("✅ User profile stored in Firestore");
       }
+
       navigate('/home');
     } catch (error: any) {
-      alert(error.message);
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          alert(" This email is already registered.");
+          break;
+        case 'auth/invalid-email':
+          alert(" Invalid email address.");
+          break;
+        case 'auth/weak-password':
+          alert(" Password is too weak.");
+          break;
+        default:
+          alert("⚠️ " + error.message);
+      }
     }
   };
 
@@ -93,6 +123,7 @@ function UserSignUp() {
 }
 
 export default UserSignUp;
+
 
 
 
