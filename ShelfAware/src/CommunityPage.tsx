@@ -45,6 +45,9 @@ export default function CommunityPage() {
   const [editingPost, setEdit] = useState<string | null>(null);
   const [oriPic, setOriPic] = useState("");
   const navigate = useNavigate();
+  const [comments, setComments] = useState<{ [postId: string]: any[] }>({});
+  const [newComment, setNewComment] = useState<{ [postId: string]: string }>({});
+
 
   useEffect(() => {
     const collected = query(collection(db, "forumPosts"), orderBy("expiryDate","asc"));
@@ -64,6 +67,20 @@ export default function CommunityPage() {
             };
         });
         createPost(processingPosts);
+       
+        item.docs.forEach(async (docSnap) => {
+        const postId = docSnap.id;
+        const commentRef = collection(db, "forumPosts", postId, "comments");
+        const q = query(commentRef, orderBy("timestamp", "asc"));
+
+        onSnapshot(q, (commentSnapshot) => {
+            const commentList = commentSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+            }));
+            setComments((prev) => ({ ...prev, [postId]: commentList }));
+        });
+      });
     });
     return () => uncheck();
   }, []);
@@ -160,6 +177,16 @@ export default function CommunityPage() {
   }
 };
 
+const handleDeleteComment = async (postId: string, commentId: string) => {
+  try {
+    await deleteDoc(doc(db, "forumPosts", postId, "comments", commentId));
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    alert("Failed to delete comment.");
+  }
+};
+
+
 const handleEdit = (post: ForumPosts) => {
   setNewPost({
     foodName: post.foodName,
@@ -186,6 +213,22 @@ const handleEdit = (post: ForumPosts) => {
         return x.expiryDate.getTime() - y.expiryDate.getTime();
     }
   });
+
+  const handleCommentSubmit = async (postId: string) => {
+  const user = auth.currentUser;
+    if (!user || !newComment[postId]) return;
+
+    const commentRef = collection(db, "forumPosts", postId, "comments");
+    await addDoc(commentRef, {
+        userId: user.uid,
+        userName: user.displayName || "Anonymous",
+        content: newComment[postId],
+        timestamp: Timestamp.now(),
+    });
+
+    setNewComment((prev) => ({ ...prev, [postId]: "" }));
+    };
+
 
   return (
     <div className="communityPage">
@@ -240,47 +283,101 @@ const handleEdit = (post: ForumPosts) => {
                         <p className="noPost">No posts yet</p>
                     ) : (
                         selectedPost.map((posts) => (
-                            <div key = {posts.postId} className="postCard">
-                                {posts.foodPic ? (
-                                    <img src={posts.foodPic} alt="food" className="postPhoto" />
-                                ) : (
-                                    <div className="noImage">No Image</div>
-                                )}
-                                <div className="cardDescription">  
-                                    <div className="cardLeft"> 
-                                        <p
-                                        className="usernamePost"
-                                        title="View Profile"
-                                        onClick={() => navigate(`/viewprofile/${posts.userId}`)}
-                                        style={{ cursor: "pointer", textDecoration: "underline" }}
-                                        >
-                                        @{posts.userName}
-                                        </p>
-
-                                        <h3 className="foodNamePost">{posts.foodName}</h3>
-                                        <p>Expires: {new Date(posts.expiryDate).toLocaleDateString()}</p>
-                                        <p>Location: {posts.location}</p>
-                                        <p>Quantity: {posts.quantity}</p>
-                                    </div>
-                                    <div className="cardRight">
-                                        <div className="descriptionBox">
-                                            <p>{posts.description}</p>
-                                        </div>
-                                        <div className="postButtons">
-                                            {auth.currentUser?.uid === posts.userId && (
-                                                <>
-                                                    <button onClick={() => handleDonate(posts)}> Claim 1</button>
-                                                    <button onClick={() => handleEdit(posts)}>Edit</button>
-                                                    <button  onClick={() => handleDelete(posts)}>Delete</button>
-                                                </>
-                                            )}
-                                            <button onClick={() => navigate(`/chat`)}>Contact</button>
-                                        </div>
-                                    </div>
+                        <React.Fragment key={posts.postId}>
+                            <div className="postCard">
+                            {posts.foodPic ? (
+                                <img src={posts.foodPic} alt="food" className="postPhoto" />
+                            ) : (
+                                <div className="noImage">No Image</div>
+                            )}
+                            <div className="cardDescription">  
+                                <div className="cardLeft"> 
+                                <p
+                                    className="usernamePost"
+                                    title="View Profile"
+                                    onClick={() => navigate(`/viewprofile/${posts.userId}`)}
+                                    style={{ cursor: "pointer", textDecoration: "underline" }}
+                                >
+                                    @{posts.userName}
+                                </p>
+                                <h3 className="foodNamePost">{posts.foodName}</h3>
+                                <p>Expires: {new Date(posts.expiryDate).toLocaleDateString()}</p>
+                                <p>Location: {posts.location}</p>
+                                <p>Quantity: {posts.quantity}</p>
+                                </div>
+                                <div className="cardRight">
+                                <div className="descriptionBox">
+                                    <p>{posts.description}</p>
+                                </div>
+                                <div className="postButtons">
+                                    {auth.currentUser?.uid === posts.userId && (
+                                    <>
+                                        <button onClick={() => handleDonate(posts)}>Claim 1</button>
+                                        <button onClick={() => handleEdit(posts)}>Edit</button>
+                                        <button onClick={() => handleDelete(posts)}>Delete</button>
+                                    </>
+                                    )}
+                                    <button onClick={() => navigate(`/chat`)}>Contact</button>
+                                </div>
                                 </div>
                             </div>
+                            </div>
+
+                            <div className="commentSection">
+                            <div className="existingComments">
+                                {comments[posts.postId]?.map((c) => (
+                               <div key={c.id} className="commentItem">
+                               <div className="commentContent">
+                                    <div className="commentHeader">
+                                    <strong>@{c.userName}</strong> —{" "}
+                                    <span className="timestamp">
+                                        {new Date(c.timestamp?.toDate?.()).toLocaleString()}
+                                    </span>
+                                    </div>
+                                    <p>{c.content}</p>
+                                    </div>
+
+                                {auth.currentUser?.uid === c.userId && (
+                                    <button
+                                    className="deleteCommentBtn"
+                                    onClick={() => handleDeleteComment(posts.postId, c.id)}
+                                    title="Delete Comment"
+                                    >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                        width="18"
+                                        fill="#888"
+                                    >
+                                        <path d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z" />
+                                    </svg>
+                                    </button>
+                                )}
+                                </div>
+                                ))}
+                            </div>
+
+                            <div className="addComment">
+                                <input
+                                type="text"
+                                value={newComment[posts.postId] || ""}
+                                onChange={(e) =>
+                                    setNewComment((prev) => ({ ...prev, [posts.postId]: e.target.value }))
+                                }
+                                placeholder="Write a comment..."
+                                />
+                                <button onClick={() => handleCommentSubmit(posts.postId)}
+                                        disabled={!newComment[posts.postId]?.trim()}>
+                                Post
+                                </button>
+                            </div>
+                            </div>
+                        </React.Fragment>
                         ))
-                    )}
+                        )
+                    }
                 </div>
             </div>
         <div className="addPost">

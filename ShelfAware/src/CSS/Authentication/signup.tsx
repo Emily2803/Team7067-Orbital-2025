@@ -49,7 +49,8 @@ function UserSignUp() {
           dorm: "",
           allergies: "",
           preferences: "",
-          createdAt: serverTimestamp()
+          createdAt: serverTimestamp(),
+          notificationsEnabled: true
         });
         console.log("✅ User profile stored in Firestore");
       }

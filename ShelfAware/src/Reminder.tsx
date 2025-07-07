@@ -19,7 +19,8 @@ const ReminderEnabling: React.FC = () => {
         const database = doc(db, "users", eachUser.uid);
         const getData = await getDoc(database);
         if (getData.exists()) {
-          setOn(getData.data().notificationsEnabled || false);
+          const notifStatus = getData.data().notificationsEnabled;
+          setOn(notifStatus === true);
         }
         setProcessing(false);
       }

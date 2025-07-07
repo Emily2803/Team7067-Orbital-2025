@@ -206,9 +206,6 @@
   background-color: #388e3c;
 }
 
-
-
-
 .postCard {
   background: #fff;
   border-radius: 12px;
@@ -350,4 +347,111 @@
   font-size: 1rem;
   flex-shrink: 0;
   text-align: center;
+}
+
+.commentSection {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f6fef7;
+  padding: 1rem;
+  font-family: 'Outfit', sans-serif;
+}
+
+.existingComments {
+  margin-bottom: 0.75rem;
+}
+
+.commentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #f1fbf2;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  gap: 1rem;
+}
+
+.commentContent {
+  flex: 1;
+}
+
+.commentHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.commentHeader .timestamp {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: normal;
+  margin-left: 0.2rem;
+}
+
+.commentContent p {
+  margin: 0.25rem 0 0 0;
+}
+
+.addComment {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.addComment input {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-family: 'Outfit', sans-serif;
+  min-width: 250px;
+}
+
+.addComment button {
+  background-color: #4caf50;
+  color: white;
+  padding: 0.7rem 2.9rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  height: 100%;
+}
+
+.addComment button:hover {
+  background-color: #388e3c;
+}
+
+.addComment button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  color: #666;
+}
+
+
+
+.deleteCommentBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.deleteCommentBtn:hover svg {
+  fill: #d32f2f;
+  transform: scale(1.1);
 }

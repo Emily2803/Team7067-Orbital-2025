@@ -14,7 +14,6 @@ import CommunityPage from "./CommunityPage";
 import Achievements from './Achievement';
 import Chats from './ChatPage';
 import ViewProfile from './ViewProfile';
-import ChangeEmail from './ChangeEmail';
 
 function App() {
   return (
@@ -35,7 +34,6 @@ function App() {
             <Route path="/progress" element={<Achievements />}  />
             <Route path="/chat" element={<Chats />} />
             <Route path="/viewprofile/:userId" element={<ViewProfile />} />
-            <Route path="/changeemail" element={<ChangeEmail />} />
           </Routes>
         </div>
       </Router>
