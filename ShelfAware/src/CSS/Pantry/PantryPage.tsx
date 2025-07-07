@@ -72,6 +72,23 @@ export default function PantryPage() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    const now = new Date();
+    now.setHours(0, 0, 0, 0); 
+
+    for (const dateStr of expiryDates) {
+      const inputDate = new Date(dateStr);
+
+      if (isNaN(inputDate.getTime())) {
+        alert("One of the expiry dates is invalid.");
+        return;
+      }
+
+      if (inputDate.getFullYear() < 2020) {
+        alert("Expiry date cannot be before the year 2020.");
+        return;
+      }
+    }
+
     e.preventDefault();
     if (!auth.currentUser || name.trim() === "" || expiryDates[0].trim() === "") return;
 
@@ -186,7 +203,7 @@ export default function PantryPage() {
                 <label>Expiry Date(s)</label>
                 {expiryDates.map((date, i) => (
                   <div key={i} className="dateRow">
-                    <input type="date" value={date} onChange={(e) => updateDate(i, e.target.value)} required />
+                    <input type="date" value={date} onChange={(e) => updateDate(i, e.target.value)} required min="2025-01-01" max="2100-12-31"/>
                     {expiryDates.length > 1 && (
                       <button type="button" className="removeDateBtn" onClick={() => removeDate(i)}>✖️</button>
                     )}
