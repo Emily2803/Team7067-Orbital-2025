@@ -1,114 +1,100 @@
-import React, { useState, useEffect } from "react";
-import { collection, doc, getDocs, addDoc, onSnapshot, orderBy, query } from "firebase/firestore";
-import { auth, db } from "./firebase";
-import { useNavigate } from "react-router-dom";
-import "./CSS/ChatPage.css";
+import React, { useEffect, useState } from 'react';
+import {
+  collection,
+  query,
+  getDocs,
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp,
+} from 'firebase/firestore';
+import { db, auth } from './firebase';
+import { useNavigate } from 'react-router-dom';
+import './CSS/ChatPage.css';
+
+interface UserData {
+  id: string;
+  displayName: string;
+}
 
 export default function ChatPage() {
-  const [users, setUsers] = useState<any[]>([]);
-  const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [messages, setMessages] = useState<any[]>([]);
-  const [newMessage, setNewMessage] = useState("");
   const navigate = useNavigate();
-
   const currentUser = auth.currentUser;
+  const [searchName, setSearchName] = useState('');
+  const [allUsers, setAllUsers] = useState<UserData[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<UserData[]>([]);
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
-    const loadUsers = async () => {
-      const snapshot = await getDocs(collection(db, "users"));
-      const filtered = snapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          displayName: data.displayName || `User-${doc.id.substring(0, 6)}`
-        };
-      });
-      setUsers(filtered.filter(u => u.id !== currentUser?.uid)); // remove self
+    const fetchUsers = async () => {
+      const usersSnapshot = await getDocs(query(collection(db, 'users')));
+      const users = usersSnapshot.docs
+        .map(doc => ({ id: doc.id, ...(doc.data() as any) }))
+        .filter(u => u.id !== currentUser?.uid && u.displayName)
+        .sort((a, b) => a.displayName.localeCompare(b.displayName)); // Alphabetical sort
+
+      setAllUsers(users);
+      setFilteredUsers(users);
     };
-    loadUsers();
+
+    fetchUsers();
   }, [currentUser]);
 
   useEffect(() => {
-    if (!selectedUser || !currentUser) return;
+    const filtered = allUsers.filter(u =>
+      u.displayName.toLowerCase().includes(searchName.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  }, [searchName, allUsers]);
 
-    const chatId = [currentUser.uid, selectedUser.id].sort().join("_");
-    const messagesRef = collection(db, "chats", chatId, "messages");
-    const q = query(messagesRef, orderBy("timestamp", "asc"));
+  const startChatWith = async (otherUser: UserData) => {
+    if (!currentUser) return;
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const msgs = snapshot.docs.map(doc => doc.data());
-      setMessages(msgs);
-    });
+    const chatId = [currentUser.uid, otherUser.id].sort().join('_');
+    const chatRef = doc(db, 'chats', chatId);
+    const chatDoc = await getDoc(chatRef);
 
-    return () => unsubscribe();
-  }, [selectedUser, currentUser]);
+    if (!chatDoc.exists()) {
+      await setDoc(chatRef, {
+        users: [currentUser.uid, otherUser.id],
+        createdAt: serverTimestamp(),
+      });
+    }
 
-  const sendMessage = async () => {
-    if (!newMessage.trim() || !selectedUser || !currentUser) return;
-
-    const chatId = [currentUser.uid, selectedUser.id].sort().join("_");
-    const messagesRef = collection(db, "chats", chatId, "messages");
-
-    await addDoc(messagesRef, {
-      senderId: currentUser.uid,
-      receiverId: selectedUser.id,
-      text: newMessage,
-      timestamp: new Date(),
-    });
-
-    setNewMessage("");
+    navigate(`/chat/${chatId}`);
   };
 
   return (
-    <div className="chatPage">
-      <div className="chatSidebar">
-        <button className="backBtn" onClick={() => navigate(-1)}> Back</button>
-        <h3>Chats</h3>
-        <ul className="userList">
-          {users.map(user => (
-            <li
-              key={user.id}
-              onClick={() => setSelectedUser(user)}
-              className={selectedUser?.id === user.id ? "selected" : ""}
-            >
-              @{user.displayName}
-            </li>
-          ))}
-        </ul>
-      </div>
+  <div className="chatPage">
+    <button onClick={() => navigate(-1)} className="chatBackBtn"> Back</button>
 
-      <div className="chatMain">
-        {selectedUser ? (
-          <>
-            <div className="chatHeader">@{selectedUser.displayName}</div>
-            <div className="chatMessages">
-              {messages.map((msg, i) => (
-                <div
-                  key={i}
-                  className={`chatBubble ${
-                    msg.senderId === currentUser?.uid ? "sent" : "received"
-                  }`}
-                >
-                  {msg.text}
-                </div>
-              ))}
-            </div>
-            <div className="chatInput">
-              <input
-                type="text"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Type a message..."
-              />
-              <button onClick={sendMessage}>Send</button>
-            </div>
-          </>
+    <div className="chatContainer">
+      <h2>Start a Chat</h2>
+
+      <input
+        type="text"
+        placeholder="Search by Display Name"
+        value={searchName}
+        onChange={e => setSearchName(e.target.value)}
+        className="chatSearchInput"
+      />
+
+      {errorMsg && <p className="chatError">{errorMsg}</p>}
+
+      <div className="chatUserList">
+        <h3>All Available Users</h3>
+        {filteredUsers.length === 0 ? (
+          <p>No users found.</p>
         ) : (
-          <div className="chatPlaceholder">Select a user to chat with</div>
+          filteredUsers.map(u => (
+            <div key={u.id} className="chatUserCard">
+              <p>{u.displayName}</p>
+              <button onClick={() => startChatWith(u)}>Chat</button>
+            </div>
+          ))
         )}
       </div>
     </div>
-  );
+  </div>
+);
 }
-
-
