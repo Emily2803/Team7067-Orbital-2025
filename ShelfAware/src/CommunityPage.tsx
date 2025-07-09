@@ -329,7 +329,7 @@ const handleEdit = (post: ForumPosts) => {
                                <div key={c.id} className="commentItem">
                                <div className="commentContent">
                                     <div className="commentHeader">
-                                    <strong>@{c.userName}</strong> —{" "}
+                                    <strong> @{c.userName}</strong> —{" "}
                                     <span className="timestamp">
                                         {new Date(c.timestamp?.toDate?.()).toLocaleString()}
                                     </span>

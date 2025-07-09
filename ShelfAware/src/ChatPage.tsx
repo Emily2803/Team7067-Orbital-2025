@@ -11,10 +11,21 @@ import {
 import { db, auth } from './firebase';
 import { useNavigate } from 'react-router-dom';
 import './CSS/ChatPage.css';
+import Footer from './Footer';
+import ProfilePopup from './ProfilePopUp';
 
 interface UserData {
   id: string;
   displayName: string;
+}
+
+interface ProfileData {
+  displayName: string;
+  photoURL?: string;
+  age?: string;
+  dorm?: string;
+  preferences?: string;
+  allergies?: string;
 }
 
 export default function ChatPage() {
@@ -24,6 +35,7 @@ export default function ChatPage() {
   const [allUsers, setAllUsers] = useState<UserData[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<UserData[]>([]);
   const [errorMsg, setErrorMsg] = useState('');
+  const [activeProfile, setActiveProfile] = useState<ProfileData | null>(null); // ✅ new
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -64,37 +76,73 @@ export default function ChatPage() {
     navigate(`/chat/${chatId}`);
   };
 
+  // ✅ new: view profile in popup
+  const handleViewProfile = async (userId: string) => {
+    const docSnap = await getDoc(doc(db, 'users', userId));
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      setActiveProfile({
+        displayName: data.displayName,
+        photoURL: data.photoURL,
+        age: data.age,
+        dorm: data.dorm,
+        preferences: data.preferences,
+        allergies: data.allergies,
+      });
+    }
+  };
+
   return (
-  <div className="chatPage">
-    <button onClick={() => navigate(-1)} className="chatBackBtn"> Back</button>
+    <div className="outsidecontainer">
+      <div className="chatPage">
+        <button onClick={() => navigate(-1)} className="chatBackBtn"> Back</button>
 
-    <div className="chatContainer">
-      <h2>Start a Chat</h2>
+        <div className="chatContainer">
+          <h2>Start a Chat</h2>
+          <p className="chatsubtitle">Search for someone and start a conversation 🍃</p>
 
-      <input
-        type="text"
-        placeholder="Search by Display Name"
-        value={searchName}
-        onChange={e => setSearchName(e.target.value)}
-        className="chatSearchInput"
-      />
+          <input
+            type="text"
+            placeholder="Search by Display Name"
+            value={searchName}
+            onChange={e => setSearchName(e.target.value)}
+            className="chatSearchInput"
+          />
 
-      {errorMsg && <p className="chatError">{errorMsg}</p>}
+          {errorMsg && <p className="chatError">{errorMsg}</p>}
 
-      <div className="chatUserList">
-        <h3>All Available Users</h3>
-        {filteredUsers.length === 0 ? (
-          <p>No users found.</p>
-        ) : (
-          filteredUsers.map(u => (
-            <div key={u.id} className="chatUserCard">
-              <p>{u.displayName}</p>
-              <button onClick={() => startChatWith(u)}>Chat</button>
-            </div>
-          ))
-        )}
+          <div className="chatUserList">
+            <h3>All Available Users</h3>
+            {filteredUsers.length === 0 ? (
+              <p>No users found.</p>
+            ) : (
+              filteredUsers.map(u => (
+                <div key={u.id} className="chatUserCard">
+                  <div className="tooltipWrapper">
+                  <span
+                    className="tooltipTarget"
+                    onClick={() => handleViewProfile(u.id)}
+                  >
+                    {u.displayName}
+                  </span>
+                  <div className="customTooltip">View Profile</div>
+                </div>
+                  <button onClick={() => startChatWith(u)}>Chat</button>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
       </div>
+
+      <Footer />
+
+      {activeProfile && (
+        <ProfilePopup
+          profile={activeProfile}
+          onClose={() => setActiveProfile(null)}
+        />
+      )}
     </div>
-  </div>
-);
+  );
 }

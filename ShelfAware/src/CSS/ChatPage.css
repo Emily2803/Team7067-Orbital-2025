@@ -35,8 +35,9 @@
 }
 
 .chatContainer h2 {
-  margin-bottom: 1rem;
+  margin-bottom: 0.3rem;
   color: #2e7d32;
+  text-align: center;
 }
 
 .chatSearchInput {
@@ -93,3 +94,45 @@
   font-size: 0.9rem;
 }
 
+.chatsubtitle {
+  text-align: center;
+  font-size: 1rem;
+  color: #555;
+  margin-top: 0rem;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.tooltipWrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltipTarget {
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.customTooltip {
+  visibility: hidden;
+  background-color: #2e7d32;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 10;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltipWrapper:hover .customTooltip {
+  visibility: visible;
+  opacity: 1;
+}
