@@ -76,7 +76,6 @@ export default function ChatPage() {
     navigate(`/chat/${chatId}`);
   };
 
-  // ✅ new: view profile in popup
   const handleViewProfile = async (userId: string) => {
     const docSnap = await getDoc(doc(db, 'users', userId));
     if (docSnap.exists()) {

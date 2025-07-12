@@ -1,91 +1,91 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
-import { db, auth } from "./firebase";
+import React, { useEffect, useState, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { db, auth } from './firebase';
 import {
-  doc,
-  collection,
-  addDoc,
-  query,
-  orderBy,
-  onSnapshot,
-  serverTimestamp,
-} from "firebase/firestore";
-import "./CSS/ChatWindow.css";
-import { QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
-
-interface Message {
-  id: string;
-  text: string;
-  senderId: string;
-  timestamp: any;
-}
+  doc, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy, getDoc
+} from 'firebase/firestore';
+import { format } from 'date-fns';
+import './CSS/ChatDashboard.css';
 
 export default function ChatWindow() {
-  const { chatId } = useParams<{ chatId: string }>();
+  const { chatId } = useParams();
   const currentUser = auth.currentUser;
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState("");
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [input, setInput] = useState('');
+  const [receiverName, setReceiverName] = useState('');
+  const bottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!chatId) return;
-    const messagesRef = collection(db, "chats", chatId, "messages");
-    const q = query(messagesRef, orderBy("timestamp", "asc"));
+    if (!chatId || !currentUser) return;
+
+    const fetchReceiverName = async () => {
+      const chatDoc = await getDoc(doc(db, 'chats', chatId));
+      const users = chatDoc.data()?.users;
+      const otherId = users?.find((id: string) => id !== currentUser.uid);
+      if (otherId) {
+        const userSnap = await getDoc(doc(db, 'users', otherId));
+        setReceiverName(userSnap.data()?.displayName || 'Unknown');
+      }
+    };
+
+    fetchReceiverName();
+
+    const msgRef = collection(db, 'chats', chatId, 'messages');
+    const q = query(msgRef, orderBy('timestamp'));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const msgs = snapshot.docs.map((doc : QueryDocumentSnapshot<DocumentData>) => ({
-        id: doc.id,
-        ...(doc.data() as any),
-      }));
+      const msgs = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       setMessages(msgs);
+      setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
     });
 
     return () => unsubscribe();
-  }, [chatId]);
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [chatId, currentUser]);
 
   const sendMessage = async () => {
-    if (newMessage.trim() === "" || !currentUser) return;
+    if (input.trim() === '' || !currentUser) return;
 
-    const messageRef = collection(db, "chats", chatId!, "messages");
-    await addDoc(messageRef, {
-      text: newMessage,
+    await addDoc(collection(db, 'chats', chatId!, 'messages'), {
+      text: input,
       senderId: currentUser.uid,
       timestamp: serverTimestamp(),
     });
 
-    setNewMessage("");
+    setInput('');
   };
 
   return (
-    <div className="chatWindowContainer">
-      <div className="messagesContainer">
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`messageBubble ${msg.senderId === currentUser?.uid ? "sent" : "received"}`}
-          >
-            <p>{msg.text}</p>
-            <span className="timestamp">
-              {msg.timestamp?.toDate?.().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            </span>
-          </div>
-        ))}
+    <div className="chatWindow">
+      <h3 className="chatWithTitle">Chat with {receiverName}</h3>
+      <div className="messages">
+        {messages.map(msg => {
+          const isCurrentUser = msg.senderId === currentUser?.uid;
+          const formattedTime = msg.timestamp?.toDate
+            ? format(msg.timestamp.toDate(), 'dd MMM yyyy • HH:mm')
+            : '';
+
+          return (
+            <div
+              key={msg.id}
+              className={`messageBubble ${isCurrentUser ? 'sent' : 'received'}`}
+            >
+              <div className="messageMeta">
+                <span className="senderName">{isCurrentUser ? 'You' : receiverName}</span>
+                <span className="timestamp">{formattedTime}</span>
+              </div>
+              <p>{msg.text}</p>
+            </div>
+          );
+        })}
         <div ref={bottomRef} />
       </div>
-
-      <div className="messageInputBar">
-        <input
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type your message..."
-        />
+      <div className="chatInputBar">
+        <input value={input} onChange={e => setInput(e.target.value)} placeholder="Type a message..." />
         <button onClick={sendMessage}>Send</button>
       </div>
     </div>
   );
 }
+
+
 

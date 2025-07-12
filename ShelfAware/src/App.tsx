@@ -14,7 +14,7 @@ import CommunityPage from "./CommunityPage";
 import Achievements from './Achievement';
 import Chats from './ChatPage';
 import ViewProfile from './ViewProfile';
-import ChatWindow from './ChatWindow';
+import ChatDashboard from './ChatDashboard';
 
 function App() {
   return (
@@ -35,7 +35,7 @@ function App() {
             <Route path="/progress" element={<Achievements />}  />
             <Route path="/chat" element={<Chats />} />
             <Route path="/viewprofile/:userId" element={<ViewProfile />} />
-            <Route path="/chat/:chatId" element={<ChatWindow />} />
+            <Route path="/chat/:chatId" element={<ChatDashboard />} />
           </Routes>
         </div>
       </Router>
