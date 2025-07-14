@@ -1,7 +1,34 @@
+
 .chatDashboard {
-  display: flex;
-  height: 100vh;
+  padding: 1rem;
+  background: #f9fdfb;
+  min-height: 100vh;
+  font-family: 'Outfit', sans-serif;
 }
+
+.chatDashboardMain {
+  display: flex;
+}
+
+.chatBackBtn {
+  background-color: white;
+  border: none;
+  color: #2e7d32;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-bottom: 1rem;
+}
+
+.chatBackBtn:hover {
+  background-color: #2e7d32;
+  color: white;
+  text-decoration: underline;
+}
+
 
 .chatList {
   width: 30%;
@@ -44,29 +71,43 @@
 }
 
 .messageBubble {
-  max-width: 70%;
+  max-width: 80%;
   margin: 0.5rem 0;
-  padding: 0.75rem;
-  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  font-size: 0.95rem;
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .sent {
   align-self: flex-end;
   background-color: #dcf8c6;
+  border-top-right-radius: 4px;
 }
 
 .received {
   align-self: flex-start;
-  background-color: #f1f0f0;
+  background-color: #f0f0f0;
+  border-top-left-radius: 4px;
 }
 
 .messageMeta {
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;
   margin-bottom: 4px;
-  color: #555;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #2e7d32;
 }
+
+.timestamp {
+  color: #777;
+  font-weight: 400;
+}
+
 
 .chatInputBar {
   display: flex;

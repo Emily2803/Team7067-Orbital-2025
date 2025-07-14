@@ -94,6 +94,7 @@
     "data-view-buffer": "^1.0.2",
     "data-view-byte-length": "^1.0.2",
     "data-view-byte-offset": "^1.0.1",
+    "date-fns": "^4.1.0",
     "debug": "^4.4.1",
     "decode-uri-component": "^0.2.2",
     "deep-extend": "^0.6.0",

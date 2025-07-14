@@ -43,7 +43,7 @@ export default function ChatPage() {
       const users = usersSnapshot.docs
         .map(doc => ({ id: doc.id, ...(doc.data() as any) }))
         .filter(u => u.id !== currentUser?.uid && u.displayName)
-        .sort((a, b) => a.displayName.localeCompare(b.displayName)); // Alphabetical sort
+        .sort((a, b) => a.displayName.localeCompare(b.displayName)); 
 
       setAllUsers(users);
       setFilteredUsers(users);
@@ -94,7 +94,7 @@ export default function ChatPage() {
   return (
     <div className="outsidecontainer">
       <div className="chatPage">
-        <button onClick={() => navigate(-1)} className="chatBackBtn"> Back</button>
+        <button onClick={() => navigate('/home')} className="chatBackBtn"> Back</button>
 
         <div className="chatContainer">
           <h2>Start a Chat</h2>

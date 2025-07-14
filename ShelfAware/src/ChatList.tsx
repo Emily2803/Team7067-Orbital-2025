@@ -19,13 +19,19 @@ export default function ChatList() {
       const users: any[] = [];
 
       for (let docSnap of querySnapshot.docs) {
-        const data = docSnap.data();
+      const data = docSnap.data();
+      const messagesRef = collection(db, 'chats', docSnap.id, 'messages');
+      const messagesSnap = await getDocs(messagesRef);
+
+      if (!messagesSnap.empty) {  // Only if messages exist
         const otherId = data.users.find((id: string) => id !== currentUser.uid);
         const userSnap = await getDoc(doc(db, 'users', otherId));
         if (userSnap.exists()) {
           users.push({ ...userSnap.data(), id: otherId, chatId: docSnap.id });
         }
       }
+    }
+
 
       setChatPartners(users);
     };
