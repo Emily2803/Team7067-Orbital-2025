@@ -1,14 +1,28 @@
 .badgeOri {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 20px;
-  margin: 20px;
+  margin: 20px auto;
+  max-width: 1000px;
   justify-content: center;
+  align-items: center;
 }
 
 .badgecard {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #f8f8f8;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  width: 130px;
+}
+
+.badgecard progress {
+  width: 100%;
+  height: 10px;
+  margin-top: 5px;
 }
 
 .badge {
@@ -20,4 +34,76 @@
 .badge.locked {
   filter: grayscale(100%);
   opacity: 0.5;
+}
+
+.badge:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.badgecard img {
+  cursor: pointer;
+}
+
+.streak-tracker {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 1.5rem;
+  color: #e25822;
+}
+
+.contentWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+}
+
+.topNav {
+  position: absolute;
+  top: 2rem;
+  left: 3rem;
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  color: #2e7d32;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.backBtn:hover {
+  text-decoration: underline;
+}
+
+.recipesHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-top: 0rem;
+}
+
+.pageTitle {
+  font-size: 2.5rem;
+  color: #2e7d32;
+  margin-bottom: 0.3rem;
+}
+
+.pageSubtitle {
+  color: #555;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.badgeTypes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }

@@ -23,6 +23,7 @@ interface PantryItem {
   expiryDate: Date;
   quantity: number;
   remark?: string;
+  dateAdded: Timestamp;
 }
 
 export default function PantryPage() {
@@ -54,6 +55,7 @@ export default function PantryPage() {
             expiryDate: d.expiryDate.toDate(),
             quantity: d.quantity,
             remark: d.remark || "",
+            dateAdded: d.dateAdded || Timestamp.now()
           };
         });
         setItems(data);
@@ -103,6 +105,7 @@ export default function PantryPage() {
             expiryDate: Timestamp.fromDate(new Date(expiryDates[0])),
             quantity,
             remark,
+            dateAdded: Timestamp.now()
           });
         } else {
           await deleteDoc(doc(db, "pantry", editingItem.id));
@@ -126,6 +129,7 @@ export default function PantryPage() {
             expiryDate: Timestamp.fromDate(new Date(date)),
             quantity,
             remark,
+            dateAdded: Timestamp.now()
           });
         }
       }
@@ -154,6 +158,8 @@ export default function PantryPage() {
   };
 
   const handleConsume = async (item: PantryItem) => {
+    const user = auth.currentUser;
+    if (!user) return;
     if (item.quantity > 1) {
       await updateDoc(doc(db, "pantry", item.id), {
         quantity: item.quantity - 1,
@@ -161,6 +167,11 @@ export default function PantryPage() {
     } else {
       await deleteDoc(doc(db, "pantry", item.id));
     }
+    await addDoc(collection(db, "consumedLogs"), {
+      userId: user.uid,
+      name: item.name,
+      consumedAt: Timestamp.now(),
+    });
   };
 
   const updateDate = (index: number, value: string) => {
