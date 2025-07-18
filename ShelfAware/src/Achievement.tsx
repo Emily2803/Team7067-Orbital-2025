@@ -125,7 +125,7 @@ const Achievements = () => {
       }
     ];
     setBadges(updatedBadges);
-}, [addedCount, usedUp ]);
+}, [addedCount, usedUp, donated ]);
 
 useEffect(() => {
   if (!userId) return;

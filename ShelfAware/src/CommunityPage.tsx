@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { auth, db,} from "./firebase";
 import {
+  getDoc,
   addDoc,
   deleteDoc,
   updateDoc,
@@ -148,12 +149,28 @@ export default function CommunityPage() {
         foodPic: imageUrl, 
     };
 
+    const donationDetails = {
+        userId: existUser.uid,
+        postId: editingPost || "",
+        donationCount: 1,
+    };
+
     if (editingPost) {
         await updateDoc(doc(db, "forumPosts", editingPost), postDetails);
         alert("Edited post!");
     } else {
         await addDoc(collection(db, "forumPosts"), postDetails);
         alert("Post added!");
+    }
+
+    const userRecord = doc(db, "users", existUser.uid);
+    const userDoc = await getDoc(userRecord);
+    if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const nowCount = userData?.donationCount || 0;
+        await updateDoc(userRecord, {
+            donationCount: (nowCount || 0) + 1,
+        });
     }
 
     setNewPost({
