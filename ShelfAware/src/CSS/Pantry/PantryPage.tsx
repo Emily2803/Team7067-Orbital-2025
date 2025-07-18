@@ -270,7 +270,12 @@ export default function PantryPage() {
                       <button className={`btn donate ${daysLeft < 0 ? 'unavailable' : ''}`}
                         disabled={daysLeft < 0} onClick={() => {
                           if (daysLeft >= 0) {
-                            navigate("/exchange", { state: { item } });
+                            navigate("/exchange", { state: { 
+                              foodName: item.name,
+                              quantity: item.quantity,
+                              expiryDate: item.expiryDate.toISOString().split("T")[0],
+                              remark: item.remark,
+                             } });
                           }
                         }}>Donate</button>
                       <button className="btn remove" onClick={() => handleDelete(item.id)}> Remove</button>

@@ -11,7 +11,7 @@ import {
   query,
   Timestamp,
 } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./CSS/CommunityPage.css";
 import Footer from "./Footer";
 
@@ -45,9 +45,21 @@ export default function CommunityPage() {
   const [editingPost, setEdit] = useState<string | null>(null);
   const [oriPic, setOriPic] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   const [comments, setComments] = useState<{ [postId: string]: any[] }>({});
   const [newComment, setNewComment] = useState<{ [postId: string]: string }>({});
-
+  const { foodName, quantity, expiryDate, remark } = location.state || {};
+  useEffect(() => {
+    if (foodName || quantity || expiryDate) {
+        setNewPost(existingState => ({
+            ...existingState,
+            foodName: foodName || existingState.foodName,
+            quantity: quantity || existingState.quantity,
+            expiryDate: expiryDate || existingState.expiryDate,
+            description: remark || existingState.description,
+        }));
+    }
+  }, [foodName, quantity, expiryDate, remark]);
 
   useEffect(() => {
     const collected = query(collection(db, "forumPosts"), orderBy("expiryDate","asc"));
@@ -106,7 +118,8 @@ export default function CommunityPage() {
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
-    const existUser = auth.currentUser;
+    const existUser 
+    = auth.currentUser;
     if (!existUser || newPost.foodName.trim() === "") return;
 
     const selectedDate = new Date(newPost.expiryDate);
