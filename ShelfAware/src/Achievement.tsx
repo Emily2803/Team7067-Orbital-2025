@@ -1,52 +1,24 @@
 import { useEffect, useState, useMemo } from "react";
-import { db } from "./firebase";
+import { db, auth } from "./firebase";
 import { doc, setDoc, collection, getDocs, where, query } from "firebase/firestore";
 import { format, subDays, isSameDay } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import "./CSS/InProgressPage.css";
 
 const Achievements = () => {
-  const [ userId, setUserId ] = useState(null);
+  const [ userId, setUserId ] = useState<string | null>(null);
   const [ total, setTotal ] = useState(0);
+  const [addedCount, setAddedCount] = useState(0);
   const [ usedUp, setUsedUp ] = useState(0);
+  const [ donated, setdonated ] = useState(0);
+  const [badges, setBadges] = useState<any[]>([]);
   const navigate = useNavigate();
 
-  const badges = useMemo(() => [
-  {
-    name: "First Time Pantry User",
-    image: "/badges/FirstTimePantryUser.png",
-    unlocked: usedUp>= 1,
-    description: "Logged your first pantry item!",
-    progress: usedUp,
-    require: 1
-  },
-  {
-    name: "Pantry Builder",
-    image: "/badges/PantryBuilder.png",
-    unlocked: usedUp >= 5,
-    description: "Added 5 or more items to your pantry!",
-    progress: usedUp,
-    require: 5
-  },
-  {
-    name: "Pantry Chef",
-    image: "/badges/PantryChef.png",
-    unlocked: usedUp >= 3,
-    description: "Consumed 3 items in a single day!",
-    progress: usedUp,
-    require: 3
-  }
-], [usedUp]);
-
   useEffect(() => {
-    const getUserId = async () => {
-      const checkLogin = await getDocs(collection(db, "loginRec"));
-      if (!checkLogin.empty) {
-        const getId = checkLogin.docs[0].data().userID;
-        setUserId(getId);
-      }
-    };
-    getUserId();
+    const user = auth.currentUser;
+    if (user) {
+      setUserId(user.uid);
+    }
   }, []);
 
   useEffect(() => {
@@ -58,12 +30,20 @@ const Achievements = () => {
       );
       const getPantryRec = await getDocs(pantryRec);
       const pantryDocs = getPantryRec.docs;
-      const dates = pantryDocs.map(doc => {
-        const data = doc.data();
+      const dates = pantryDocs.map(eachDoc => {
+        const data = eachDoc.data();
         return data.dateAdded?.toDate?.() || data.createdAt?.toDate?.() || data.timestamp?.toDate?.() || null;
       }).filter(Boolean);
 
-      setUsedUp(dates.length);
+      setAddedCount(dates.length);
+
+      const consumedRec = query(collection(db, "consumedLogs"), where("userId", "==", userId));
+      const getConsumeRec = await getDocs(consumedRec);
+      const consumedDocs = getConsumeRec.docs;
+      const consumedDates = consumedDocs.map(eachDoc =>
+        eachDoc.data().consumedAt?.toDate?.() || null
+      ).filter(Boolean);
+      setUsedUp(consumedDates.length);
 
       const dateString = new Set(dates.map(
         dateS => format(dateS, "yyyy-MM-dd"))
@@ -81,19 +61,88 @@ const Achievements = () => {
         }
       }
       setTotal(totalCount);
+    };
+    processStats();
+  }, [userId]);
 
-      for (const badge of badges) {
-        if (badge.unlocked) {
+  useEffect(() => {
+    const updatedBadges = [
+      {
+        name: "First Time Pantry User",
+        image: "/badges/FirstTimePantryUser.png",
+        unlocked: addedCount>= 1,
+        description: "Logged your first pantry item!",
+        progress: addedCount,
+        require: 1
+      },
+      {
+        name: "Pantry Builder",
+        image: "/badges/PantryBuilder.png",
+        unlocked: addedCount >= 5,
+        description: "Logged 5 or more items to your pantry!",
+        progress: addedCount,
+        require: 5
+      },
+      {
+        name: "Pantry Chef",
+        image: "/badges/PantryChef.png",
+        unlocked: addedCount >= 10,
+        description: "Logged 10 items before they expire!",
+        progress: usedUp,
+        require: 10
+      },
+      {
+        name: "Waste Saver",
+        image: "/badges/WasteSaver.png",
+        unlocked: usedUp >= 1,
+        description: "Consumed 10 items before they expire!",
+        progress: usedUp,
+        require: 1
+      },
+      {
+        name: "Waste Warrior",
+        image: "/badges/WeeklyWarrior.png",
+        unlocked: usedUp >= 5,
+        description: "Consumed 5 items before they expire!",
+        progress: usedUp,
+        require: 5
+      },
+      {
+        name: "Waste Vanisher",
+        image: "/badges/WasteVanisher.png",
+        unlocked: usedUp >= 10,
+        description: "Consumed 10 items before they expire!",
+        progress: usedUp,
+        require: 10
+      },
+      {
+        name: "First Donation",
+        image: "/badges/FirstDonation.png",
+        unlocked: donated >= 1,
+        description: "Donated your first item from your pantry!",
+        progress: donated,
+        require: 1
+      }
+    ];
+    setBadges(updatedBadges);
+}, [addedCount, usedUp ]);
+
+useEffect(() => {
+  if (!userId) return;
+  const unlockBadge = async () => {
+    await Promise.all(
+      badges.map(async(badge) => {
+        if (badge.unlocked && userId) {
           const badgeRec = doc(db, "users", userId, "achievements", badge.name);
           await setDoc(
             badgeRec, {unlocked: true, unlockedAt: new Date()},
-            {merge: true}
-          );
+            {merge: true});
         }
-      }
-    };
-    processStats();
-  },[userId, badges]);
+      })
+    );
+  };
+  unlockBadge();
+},[badges, userId]);
 
   const eachBadge = (badge: any, index:number) => (
     <div className="badgecard" key={index}>
