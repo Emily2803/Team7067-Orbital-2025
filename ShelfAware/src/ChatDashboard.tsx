@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ChatList from './ChatList';
 import ChatWindow from './ChatWindow';
 import './CSS/ChatDashboard.css';
+import Footer from './Footer';
 
 export default function ChatDashboard() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function ChatDashboard() {
         <ChatList />
         <ChatWindow />
       </div>
+      <Footer />
     </div>
   );
 }
