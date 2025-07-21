@@ -9,6 +9,7 @@ import {
   getDocs,
   orderBy,
   limit,
+  Timestamp
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -18,7 +19,8 @@ interface ChatPartner {
   id: string;
   chatId: string;
   displayName: string;
-  lastTimestamp: any;
+  lastTimestamp: Timestamp;
+  unreadCount: number;
 }
 
 export default function ChatList() {
@@ -46,21 +48,41 @@ export default function ChatList() {
         const latestMsgSnap = await getDocs(latestMsgQuery);
 
         if (!latestMsgSnap.empty) {
+          const lastTimestamp = latestMsgSnap.docs[0].data().timestamp;
+
           const otherId = chatData.users.find((id: string) => id !== currentUser.uid);
           const userSnap = await getDoc(doc(db, 'users', otherId));
+
+          // Count unread messages sent by other user
+          const unreadQuery = query(
+            messagesRef,
+            where('senderId', '==', otherId),
+            orderBy('timestamp', 'desc')
+          );
+          const unreadSnap = await getDocs(unreadQuery);
+
+          let unreadCount = 0;
+          const lastReadTime = chatData?.lastRead?.[currentUser.uid];
+
+          unreadSnap.forEach(msgDoc => {
+            const ts = msgDoc.data().timestamp;
+            if (!lastReadTime || ts?.toMillis?.() > lastReadTime.toMillis?.()) {
+              unreadCount++;
+            }
+          });
+
           if (userSnap.exists()) {
-            const lastTimestamp = latestMsgSnap.docs[0].data().timestamp;
             partners.push({
               id: otherId,
               chatId: chatDoc.id,
               displayName: userSnap.data().displayName,
               lastTimestamp,
+              unreadCount,
             });
           }
         }
       }
 
-      // Sort by most recent message
       partners.sort((a, b) => b.lastTimestamp?.toMillis?.() - a.lastTimestamp?.toMillis?.());
       setChatPartners(partners);
     });
@@ -88,12 +110,18 @@ export default function ChatList() {
           className={`chatListItem ${chatId === user.chatId ? 'active' : ''}`}
           onClick={() => navigate(`/chat/${user.chatId}`)}
         >
-          <p>{user.displayName}</p>
+          <div className="chatListItemRow">
+            <p>{user.displayName}</p>
+            {user.unreadCount > 0 && (
+              <span className="unreadBadge">{user.unreadCount}</span>
+            )}
+          </div>
         </div>
       ))}
     </div>
   );
 }
+
 
 
 

@@ -193,3 +193,18 @@
   font-size: 0.9rem;
 }
 
+.chatListItemRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.unreadBadge {
+  background-color: #e53935;
+  color: white;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
