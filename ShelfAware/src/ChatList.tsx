@@ -96,7 +96,7 @@ export default function ChatList() {
 
   return (
     <div className="chatList">
-      <h3>Chats</h3>
+      <h3>All Chats</h3>
       <input
         type="text"
         placeholder="Search..."
