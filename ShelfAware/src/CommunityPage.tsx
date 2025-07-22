@@ -11,6 +11,8 @@ import {
   orderBy,
   query,
   Timestamp,
+  setDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./CSS/CommunityPage.css";
@@ -28,6 +30,11 @@ interface ForumPosts {
     expiryDate: Date;
     location: string;
     foodPic?: string;
+}
+
+interface UserData {
+  id: string;
+  displayName: string;
 }
 
 export default function CommunityPage() {
@@ -50,6 +57,8 @@ export default function CommunityPage() {
   const [comments, setComments] = useState<{ [postId: string]: any[] }>({});
   const [newComment, setNewComment] = useState<{ [postId: string]: string }>({});
   const { foodName, quantity, expiryDate, remark } = location.state || {};
+  const currentUser = auth.currentUser;
+
   useEffect(() => {
     if (foodName || quantity || expiryDate) {
         setNewPost(existingState => ({
@@ -266,6 +275,23 @@ const handleEdit = (post: ForumPosts) => {
     setNewComment((prev) => ({ ...prev, [postId]: "" }));
     };
 
+    const startChatWith = async (otherUser: UserData) => {
+        if (!currentUser) return;
+    
+        const chatId = [currentUser.uid, otherUser.id].sort().join('_');
+        const chatRef = doc(db, 'chats', chatId);
+        const chatDoc = await getDoc(chatRef);
+    
+        if (!chatDoc.exists()) {
+          await setDoc(chatRef, {
+            users: [currentUser.uid, otherUser.id],
+            createdAt: serverTimestamp(),
+          });
+        }
+    
+        navigate(`/chat/${chatId}`);
+      };
+
 
   return (
     <div className="communityPage">
@@ -354,7 +380,9 @@ const handleEdit = (post: ForumPosts) => {
                                         <button onClick={() => handleDelete(posts)}>Delete</button>
                                     </>
                                     )}
-                                    <button onClick={() => navigate(`/chat`)}>Contact</button>
+                                    <button onClick={() => startChatWith({ id: posts.userId, displayName: posts.userName })}>
+                                    Contact
+                                    </button>
                                 </div>
                                 </div>
                             </div>
@@ -366,7 +394,12 @@ const handleEdit = (post: ForumPosts) => {
                                <div key={c.id} className="commentItem">
                                <div className="commentContent">
                                     <div className="commentHeader">
-                                    <strong> @{c.userName}</strong> —{" "}
+                                    <strong
+                                        title="View Profile"
+                                        onClick={() => navigate(`/viewprofile/${c.userId}`)}
+                                        style={{ cursor: "pointer", textDecoration: "underline" }}>
+                                      @{c.userName}
+                                    </strong> —{" "}
                                     <span className="timestamp">
                                         {new Date(c.timestamp?.toDate?.()).toLocaleString()}
                                     </span>
