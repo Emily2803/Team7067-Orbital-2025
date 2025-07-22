@@ -190,6 +190,8 @@ export default function CommunityPage() {
 
 
   const handleDonate = async (post: ForumPosts) => {
+    const user = auth.currentUser;
+    if (!user) return;
     if (post.quantity > 1) {
         await updateDoc(doc(db, "forumPosts", post.postId), {
             quantity: post.quantity -1,
@@ -197,6 +199,11 @@ export default function CommunityPage() {
     } else {
         await deleteDoc(doc(db, "forumPosts", post.postId));
     }
+    await addDoc(collection(db, "donationCount"), {
+        userId: user.uid,
+        postId : post.postId,
+        donatedAt: Timestamp.now(),
+    });
   };
 
   const handleDelete = async(post: ForumPosts) => {

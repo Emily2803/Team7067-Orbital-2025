@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { db, auth } from "./firebase";
-import { doc, setDoc, collection, getDocs, where, query } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, where, query, onSnapshot } from "firebase/firestore";
 import { format, subDays, isSameDay } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import "./CSS/InProgressPage.css";
@@ -45,6 +45,10 @@ const Achievements = () => {
       ).filter(Boolean);
       setUsedUp(consumedDates.length);
 
+      const donationRec = query(collection(db, "donationCount"), where("userId", "==", userId));
+      const getDonatedRec = await getDocs(donationRec);
+      setdonated(getDonatedRec.docs.length);
+      
       const dateString = new Set(dates.map(
         dateS => format(dateS, "yyyy-MM-dd"))
       );
