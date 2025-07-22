@@ -205,6 +205,10 @@ useEffect(() => {
       )}
     </div>
   );
+
+  const unlockedSec = badges.filter(b => b.unlocked);
+  const inProgressSec = badges.filter(b => !b.unlocked && b.progress > 0);
+  const lockedSec = badges.filter(b => b.progress === 0);
   return (
     <div className="contentWrapper">
       <div className="topNav">
@@ -219,22 +223,32 @@ useEffect(() => {
           <h2>🔥 Current Streak: {total} day{total !== 1 ? "s" : ""}</h2>
         </div>
         <h2>Badges</h2>
-        <h3>Unlocked</h3>
-        <div className="badgeTypes">
-          {badges.filter(a => a.unlocked).map(eachBadge)}
-        </div>
-
-        <h3>In Progress</h3>
-        <div className="badgeTypes">
-          {badges.filter(a => !a.unlocked && a.progress > 0).map(eachBadge)}
-        </div>
-
-        <h3>Not Started</h3>
-        <div className="badgeTypes">
-          {badges.filter(a => a.progress === 0).map(eachBadge)}
-        </div>
+        {unlockedSec.length > 0 && (
+          <>
+            <h3>Unlocked</h3>
+            <div className="badgeTypes">
+              {unlockedSec.map(eachBadge)}
+            </div>
+          </>
+        )}
+        {inProgressSec.length > 0 && (
+          <>
+            <h3>In Progress</h3>
+            <div className="badgeTypes">
+              {inProgressSec.map(eachBadge)}
+            </div>
+          </>
+        )}
+        {lockedSec.length > 0 && (
+          <>
+            <h3>Not Started</h3>
+            <div className="badgeTypes">
+              {lockedSec.map(eachBadge)}
+            </div>
+          </>
+        )}
       </div>
     </div>
-    );
-  };
+  );
+};
 export default Achievements;
