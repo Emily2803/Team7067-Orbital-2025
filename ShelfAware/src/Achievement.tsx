@@ -48,7 +48,7 @@ const Achievements = () => {
       const donationRec = query(collection(db, "donationCount"), where("userId", "==", userId));
       const getDonatedRec = await getDocs(donationRec);
       setdonated(getDonatedRec.docs.length);
-      
+
       const dateString = new Set(dates.map(
         dateS => format(dateS, "yyyy-MM-dd"))
       );
@@ -126,10 +126,50 @@ const Achievements = () => {
         description: "Donated your first item from your pantry!",
         progress: donated,
         require: 1
-      }
+      },
+      {
+        name: "Kind Donor",
+        image: "/badges/Kind Donor.png",
+        unlocked: donated >= 5,
+        description: "Donated 5 items from your pantry!",
+        progress: donated,
+        require: 5
+      },
+      {
+        name: "Generous Giver",
+        image: "/badges/GenerousGiver.png",
+        unlocked: donated >= 10,
+        description: "Donated 10 items from your pantry!",
+        progress: donated,
+        require: 10
+      },
+      {
+        name: "Century Saver",
+        image: "/badges/CenturySaver.png",
+        unlocked: total >= 100,
+        description: "Maintained a 100 days of food logging streak!",
+        progress: total,
+        require: 100
+      },
+      {
+        name: "Pantry King",
+        image: "/badges/PantryKing.png",
+        unlocked: addedCount >= 100,
+        description: "Added 100 items to your pantry!",
+        progress: addedCount,
+        require: 100
+      },
+      {
+        name: "ShelfAware Champion",
+        image: "/badges/ShelfAwareChampion.png",
+        unlocked: donated >= 200,
+        description: "Donated 200 items from your pantry!",
+        progress: donated,
+        require: 200,
+      },
     ];
     setBadges(updatedBadges);
-}, [addedCount, usedUp, donated ]);
+}, [addedCount, usedUp, donated, total]);
 
 useEffect(() => {
   if (!userId) return;
