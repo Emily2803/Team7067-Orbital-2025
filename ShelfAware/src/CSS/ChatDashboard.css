@@ -45,6 +45,7 @@
 }
 
 .chatList h3 {
+  margin-left: 0.5rem;
   font-size: 1.5rem;
   margin-bottom: 1.3rem;
   color: #2e7d32;
@@ -84,10 +85,6 @@
   text-align: center;
   cursor: pointer;
   transition: text-decoration 0.2s;
-}
-
-.chatWithTitle:hover {
-  text-decoration: underline;
 }
 
 .messages {

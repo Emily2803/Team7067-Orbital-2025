@@ -7,6 +7,17 @@ import {
 } from 'firebase/firestore';
 import { format } from 'date-fns';
 import './CSS/ChatDashboard.css';
+import './CSS/ChatPage.css'
+import ProfilePopup from './ProfilePopUp';
+
+interface ProfileData {
+  displayName: string;
+  photoURL?: string;
+  age?: string;
+  dorm?: string;
+  preferences?: string;
+  allergies?: string;
+}
 
 export default function ChatWindow() {
   const { chatId } = useParams();
@@ -17,6 +28,7 @@ export default function ChatWindow() {
   const [chatDoc, setChatDoc] = useState<any>(null);
   const [receiverId, setReceiverId] = useState('');
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const [activeProfile, setActiveProfile] = useState<ProfileData | null>(null); 
 
   useEffect(() => {
     if (!chatId || !currentUser) return;
@@ -79,9 +91,34 @@ export default function ChatWindow() {
     setInput('');
   };
 
+  const handleViewProfile = async (userId: string) => {
+      const docSnap = await getDoc(doc(db, 'users', userId));
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setActiveProfile({
+          displayName: data.displayName,
+          photoURL: data.photoURL,
+          age: data.age,
+          dorm: data.dorm,
+          preferences: data.preferences,
+          allergies: data.allergies,
+        });
+      }
+    };
+
   return (
     <div className="chatWindow">
-      <h3 className="chatWithTitle">Chat with {receiverName}</h3>
+      <h3 className="chatWithTitle">{ 'Chat With '}
+        <div className="tooltipWrapper">
+        <span
+          className="tooltipTarget"
+          onClick={() => handleViewProfile(receiverId)}
+        >
+          {receiverName}
+        </span>
+        <div className="customTooltip">View Profile</div>
+        </div>
+      </h3>
       <div className="messages">
         {messages.map(msg => {
           const isCurrentUser = msg.senderId === currentUser?.uid;
@@ -123,6 +160,14 @@ export default function ChatWindow() {
         />
         <button onClick={sendMessage}>Send</button>
       </div>
+
+      {activeProfile && (
+      <ProfilePopup
+        profile={activeProfile}
+        onClose={() => setActiveProfile(null)}
+      />
+      )}
+
     </div>
   );
 }

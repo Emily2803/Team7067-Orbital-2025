@@ -45,7 +45,7 @@ function UserSignUp() {
         await setDoc(doc(db, 'users', user.uid), {
           userId: user.uid,
           email: user.email,
-          name: user.displayName,
+          displayName: user.displayName,
           dorm: "",
           allergies: "",
           preferences: "",

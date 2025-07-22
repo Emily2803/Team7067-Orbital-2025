@@ -81,13 +81,14 @@ export default function ProfilePage() {
     });
 
     await setDoc(doc(db, "users", user.uid), {
-      displayName,  
+      displayName,
       photoURL: profilePicUrl,
       age,
       dorm,
       preferences,
       allergies,
-    });
+    }, { merge: true });
+
 
     alert("Profile updated!");
     navigate('/home');

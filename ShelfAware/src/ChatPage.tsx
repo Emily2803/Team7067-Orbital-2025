@@ -35,7 +35,7 @@ export default function ChatPage() {
   const [allUsers, setAllUsers] = useState<UserData[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<UserData[]>([]);
   const [errorMsg, setErrorMsg] = useState('');
-  const [activeProfile, setActiveProfile] = useState<ProfileData | null>(null); // ✅ new
+  const [activeProfile, setActiveProfile] = useState<ProfileData | null>(null); 
 
   useEffect(() => {
     const fetchUsers = async () => {
