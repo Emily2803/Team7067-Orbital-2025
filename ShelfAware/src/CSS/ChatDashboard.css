@@ -1,5 +1,4 @@
 .chatDashboard {
-  padding: 1rem;
   background: #f9fdfb;
   min-height: 100vh;
   font-family: 'Outfit', sans-serif;
@@ -9,6 +8,15 @@
   display: flex;
   height: calc(100vh - 4rem); 
 }
+
+.chatListWithBack {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  background: #eefaf0;
+  border-right: 1px solid #ccc;
+}
+
 
 .chatBackBtn {
   background-color: white;
@@ -30,16 +38,15 @@
 }
 
 .chatList {
-  width: 30%;
-  padding: 1rem;
-  border-right: 1px solid #ccc;
+  width: 100%;
+  padding: 0.4rem 1.3rem 1rem 1rem;
   background: #eefaf0;
   overflow-y: auto;
 }
 
 .chatList h3 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  margin-bottom: 1.3rem;
   color: #2e7d32;
 }
 
@@ -71,9 +78,9 @@
 }
 
 .chatWithTitle {
-  margin-bottom: 1rem;
+  margin-bottom: 2.3rem;
   color: #2e7d32;
-  font-weight: 600;
+  font-weight: 900;
   text-align: center;
   cursor: pointer;
   transition: text-decoration 0.2s;
@@ -87,7 +94,7 @@
   flex-grow: 1;
   overflow-y: auto;
   margin-bottom: 1rem;
-  padding-right: 0.5rem;
+  padding: 0;
 }
 
 
@@ -202,7 +209,7 @@
   background-color: #dcf8c6;
   border-top-right-radius: 4px;
   text-align: right;
-  align-items: flex-end; /* ensures right-aligned inner content */
+  align-items: flex-end; 
 }
 
 .received {
@@ -268,4 +275,15 @@
   color: #999;
   font-style: italic;
   margin-top: 0.2rem;
+}
+
+.Footerchat {
+  margin-top: 0rem;
+  padding: 1.5rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #777;
+  background-color: #f0f4f0;
+  border-top: 1px solid #ddd;
+  font-weight: 400;
 }

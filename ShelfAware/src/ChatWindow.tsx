@@ -94,7 +94,7 @@ export default function ChatWindow() {
           if (isCurrentUser && chatDoc?.lastRead?.[receiverId]) {
             const seenTime = chatDoc.lastRead[receiverId].toMillis?.();
             const msgTime = msg.timestamp?.toMillis?.();
-            messageStatus = seenTime >= msgTime ? 'Seen' : 'Sent';
+            messageStatus = seenTime >= msgTime ? 'Seen' : 'Delivered';
           }
           
 
