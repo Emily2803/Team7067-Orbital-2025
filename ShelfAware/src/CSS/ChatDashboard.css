@@ -27,7 +27,7 @@
   border-radius: 999px;
   font-weight: 600;
   cursor: pointer;
-  margin: 2rem 0 1rem 1.5rem;
+  margin: 3rem 0 1rem 1.5rem;
   transition: 0.2s ease-in-out;
   align-self: flex-start;
 }
@@ -74,11 +74,13 @@
   width: 70%;
   padding: 1rem;
   display: flex;
+  
   flex-direction: column;
   position: relative;
 }
 
 .chatWithTitle {
+  margin-top: 2.3rem;
   margin-bottom: 2.3rem;
   color: #2e7d32;
   font-weight: 900;
@@ -283,4 +285,18 @@
   background-color: #f0f4f0;
   border-top: 1px solid #ddd;
   font-weight: 400;
+}
+
+.attachmentIcon {
+  margin-top: 0.4rem;
+  margin-right: 8px;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.sentImage {
+  max-width: 300px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
 }

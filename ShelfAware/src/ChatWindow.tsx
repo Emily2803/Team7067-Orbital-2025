@@ -10,6 +10,8 @@ import './CSS/ChatDashboard.css';
 import './CSS/ChatPage.css'
 import ProfilePopup from './ProfilePopUp';
 
+const UPLOADCARE_PUBLIC_KEY = "1c6044eae7f09b3a5c87";
+
 interface ProfileData {
   displayName: string;
   photoURL?: string;
@@ -106,6 +108,36 @@ export default function ChatWindow() {
       }
     };
 
+  const handleImageUpload = async (file: File) => {
+  const formData = new FormData();
+  formData.append("UPLOADCARE_PUB_KEY", UPLOADCARE_PUBLIC_KEY);
+  formData.append("file", file);
+
+  const res = await fetch("https://upload.uploadcare.com/base/", {
+    method: "POST",
+    body: formData,
+  });
+
+  const data = await res.json();
+  if (data && data.file) {
+    const cdnUrl = `https://ucarecdn.com/${data.file}/`;
+    await addDoc(collection(db, 'chats', chatId!, 'messages'), {
+      imageUrl: cdnUrl,
+      senderId: currentUser?.uid,
+      timestamp: serverTimestamp(),
+    });
+
+    await updateDoc(doc(db, 'chats', chatId!), {
+      lastSenderId: currentUser?.uid,
+      [`readBy.${currentUser?.uid}`]: true,
+      [`readBy.${receiverId}`]: false,
+    });
+  } else {
+    alert("❌ Failed to upload image.");
+  }
+};
+
+
   return (
     <div className="chatWindow">
       <h3 className="chatWithTitle">{ 'Chat With '}
@@ -145,6 +177,9 @@ export default function ChatWindow() {
                 <span className="timestamp">{formattedTime}</span>
               </div>
               <p>{msg.text}</p>
+              {msg.imageUrl && (
+                <img src={msg.imageUrl} alt="sent-img" className="sentImage" />
+              )}
               {isCurrentUser && <span className="messageStatus">{messageStatus}</span>}
             </div>
           );
@@ -158,6 +193,18 @@ export default function ChatWindow() {
           onChange={e => setInput(e.target.value)}
           placeholder="Type a message..."
         />
+        <label className="attachmentIcon">
+        📎
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={e => {
+            const file = e.target.files?.[0];
+            if (file) handleImageUpload(file);
+          }}
+        />
+      </label>
         <button onClick={sendMessage}>Send</button>
       </div>
 

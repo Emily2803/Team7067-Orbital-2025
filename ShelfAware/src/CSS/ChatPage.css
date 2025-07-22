@@ -1,11 +1,10 @@
 .chatPage {
   padding: 2rem;
   background-color: #f9fdfb;
-  min-height: 100vh;
   font-family: 'Outfit', sans-serif;
 }
 
-.chatBackBtn {
+.chatBackBtns {
   background-color: white;
   border: none;
   color: #2e7d32;
@@ -18,7 +17,7 @@
   white-space: nowrap;
 }
 
-.chatBackBtn:hover {
+.chatBackBtns:hover {
   background-color: #2e7d32;
   color: white;
   text-decoration: underline;

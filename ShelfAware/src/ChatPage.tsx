@@ -94,7 +94,7 @@ export default function ChatPage() {
   return (
     <div className="outsidecontainer">
       <div className="chatPage">
-        <button onClick={() => navigate('/home')} className="chatBackBtn"> Back</button>
+        <button onClick={() => navigate('/home')} className="chatBackBtns"> Back</button>
 
         <div className="chatContainer">
           <h2>Start a Chat</h2>
