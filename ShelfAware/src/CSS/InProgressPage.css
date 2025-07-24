@@ -1,4 +1,7 @@
 .badgeOri {
+  background-color: #e8f5e9;
+  padding: 1.5rem;        
+  border-radius: 12px;  
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -6,6 +9,23 @@
   max-width: 1000px;
   justify-content: center;
   align-items: center;
+  margin-top: 0;
+}
+
+.badgeOri h2 {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #2e7d32;
+  font-family: inherit;    
+}
+
+.badgeOri h3 {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;   
+  font-family: inherit;  
 }
 
 .badgecard {
@@ -97,7 +117,7 @@
 }
 
 .recipesHeader {
-  text-align: center;
+  text-align: 0.5rem;
 }
 
 .pageTitles {
