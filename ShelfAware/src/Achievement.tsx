@@ -225,8 +225,8 @@ useEffect(() => {
         <button className="backBtn" onClick={() => navigate(-1)}>Back</button>
       </div>
       <div className="recipesHeader">
-        <h1 className="pageTitle">Achievements 🏆</h1>
-        <p className="pageSubtitle">Track your pantry progress and collect badges!</p>
+        <h1 className="pageTitles">Achievements 🏆</h1>
+        <p className="pageSubtitles">Track your pantry progress and collect badges!</p>
       </div>
       <div className="streak-tracker">
         <span className="streakmsg">
