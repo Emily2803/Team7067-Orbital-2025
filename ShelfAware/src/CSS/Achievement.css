@@ -72,10 +72,10 @@
 }
 
 .streak-tracker {
-  position: absolute;
+  position: relative;
   display: inline-flex;
-  top: 5rem;
-  right:14rem;
+  cursor: pointer;
+  top: -2.5rem;
   gap: 0.1rem;
   background: rgba(255,255,255,0.8);
   padding: 0.5rem 1rem;
@@ -203,4 +203,12 @@
 .badgeLocked p {
   color: #999;
   font-style: italic;
+}
+
+.toastFont {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  max-width: 70%;
 }

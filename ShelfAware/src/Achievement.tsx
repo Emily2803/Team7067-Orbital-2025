@@ -3,7 +3,11 @@ import { db, auth } from "./firebase";
 import { doc, setDoc, collection, getDocs, where, query, onSnapshot } from "firebase/firestore";
 import { format, subDays, isSameDay } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import "./CSS/InProgressPage.css";
+import "./CSS/Achievement.css";
+import Footer from "./Footer";
+import Confetti from 'react-confetti';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Achievements = () => {
   const [ userId, setUserId ] = useState<string | null>(null);
@@ -14,6 +18,9 @@ const Achievements = () => {
   const [badges, setBadges] = useState<any[]>([]);
   const [popUpBadge, setPopUpBadge] = useState<any | null>(null);
   const navigate = useNavigate();
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [claimedBadges, setClaimedBadges] = useState<string[]>([]);
+
 
   useEffect(() => {
     const user = auth.currentUser;
@@ -24,6 +31,15 @@ const Achievements = () => {
 
   useEffect(() => {
     if (!userId) return;
+
+    const unsub = onSnapshot(
+        collection(db, "users", userId, "achievements"),
+        (snapshot) => {
+          const unlockedNames = snapshot.docs.map(doc => doc.id);
+          setClaimedBadges(unlockedNames);
+        }
+    );
+
     const processStats = async () => {
       const pantryRec = query(
       collection(db, "pantry"),
@@ -176,18 +192,33 @@ useEffect(() => {
   if (!userId) return;
   const unlockBadge = async () => {
     await Promise.all(
-      badges.map(async(badge) => {
-        if (badge.unlocked && userId) {
+      badges.map(async (badge) => {
+        if (badge.unlocked && !claimedBadges.includes(badge.name)) {
+
           const badgeRec = doc(db, "users", userId, "achievements", badge.name);
           await setDoc(
-            badgeRec, {unlocked: true, unlockedAt: new Date()},
-            {merge: true});
+            badgeRec,
+            { unlocked: true, unlockedAt: new Date() },
+            { merge: true }
+          );
+
+          // Trigger confetti and toast
+          setShowConfetti(true);
+          toast.success( <div className="toastFont" > 
+           `🎉 You just unlocked {badge.name} 🏅!` </div>, {
+            position: "top-center",
+            autoClose: 5000,
+          });
+
+          setTimeout(() => setShowConfetti(false), 5000);
         }
       })
     );
   };
+
   unlockBadge();
-},[badges, userId]);
+}, [badges, userId, claimedBadges]);
+
 
   const eachBadge = (badge: any, index:number) => (
     <div className="badgecard" key={index} onClick={() => setPopUpBadge(badge)}
@@ -220,6 +251,7 @@ useEffect(() => {
   const inProgressSec = badges.filter(b => !b.unlocked && b.progress > 0);
   const lockedSec = badges.filter(b => b.progress === 0);
   return (
+    <div className="mainwrapper">
     <div className="contentWrapper">
       <div className="topNav">
         <button className="backBtn" onClick={() => navigate(-1)}>Back</button>
@@ -232,10 +264,6 @@ useEffect(() => {
         <span className="streakmsg">
           Current Streak 🔥: {total} day{total !== 1 ? "s" : ""}
         </span>
-        <span
-          className="streak-help"
-          title="Streak is the number of consecutive days you’ve logged food into your pantry, keep it going!"
-        >❔</span>
       </div>
       <div className="badgeOri">
         <h2>Badges</h2>
@@ -281,6 +309,10 @@ useEffect(() => {
           </div>
         </div>
       )}
+    {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
+      <ToastContainer />
+    </div>
+    <Footer />
     </div>
   );
 };
