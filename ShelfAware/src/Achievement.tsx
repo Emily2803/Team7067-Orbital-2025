@@ -9,6 +9,7 @@ import Confetti from 'react-confetti';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 const Achievements = () => {
   const [ userId, setUserId ] = useState<string | null>(null);
   const [ total, setTotal ] = useState(0);
@@ -20,6 +21,7 @@ const Achievements = () => {
   const navigate = useNavigate();
   const [showConfetti, setShowConfetti] = useState(false);
   const [claimedBadges, setClaimedBadges] = useState<string[]>([]);
+  const [leaderboard, setLeaderboard] = useState<any[]>([]);
 
 
   useEffect(() => {
@@ -250,6 +252,39 @@ useEffect(() => {
   const unlockedSec = badges.filter(b => b.unlocked);
   const inProgressSec = badges.filter(b => !b.unlocked && b.progress > 0);
   const lockedSec = badges.filter(b => b.progress === 0);
+
+  useEffect(() => {
+  const fetchLeaderboard = async () => {
+    const usersSnap = await getDocs(collection(db, "users"));
+    const usersData = [];
+
+    for (const userDoc of usersSnap.docs) {
+      const userId = userDoc.id;
+      const userInfo = userDoc.data();
+
+      const achievementsRef = collection(db, "users", userId, "achievements");
+      const achievementsSnap = await getDocs(achievementsRef);
+      const unlockedCount = achievementsSnap.docs.filter(doc => doc.data().unlocked).length;
+
+      usersData.push({
+        userId,
+        displayName: userInfo.displayName || "Anonymous",
+        photoURL: userInfo.photoURL || "",
+        unlockedCount
+      });
+    }
+
+    // Sort and take top 5
+    const topUsers = usersData
+      .sort((a, b) => b.unlockedCount - a.unlockedCount)
+      .slice(0, 5);
+
+    setLeaderboard(topUsers);
+  };
+
+  fetchLeaderboard();
+}, []);
+
   return (
     <div className="mainwrapper">
     <div className="contentWrapper">
@@ -309,6 +344,23 @@ useEffect(() => {
           </div>
         </div>
       )}
+      <h2 className="leaderboard-title">🏅 Top 5 Badge Collectors</h2>
+      <div className="leaderboard">
+        {leaderboard.map((user, index) => (
+          <div key={user.userId} className="leaderboard-item">
+            <span className="rank">#{index + 1}</span>
+            {user.photoURL ? (
+          <img src={user.photoURL} alt="Profile" className="profile-pic" />
+            ) : (
+              <div className="popup-fallback-avatars">
+                {user.displayName.charAt(0).toUpperCase()}
+              </div>
+            )}
+            <span className="name">{user.displayName}</span>
+            <span className="count">{user.unlockedCount} Badges</span>
+          </div>
+        ))}
+      </div>
     {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
       <ToastContainer />
     </div>
