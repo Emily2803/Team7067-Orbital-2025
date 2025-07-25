@@ -100,7 +100,7 @@ const Achievements = () => {
         name: "Waste Saver",
         image: "/badges/WasteSaver.png",
         unlocked: usedUp >= 1,
-        description: "Consume 10 items before they expire!",
+        description: "Consume 1 items before they expire!",
         progress: usedUp,
         require: 1
       },

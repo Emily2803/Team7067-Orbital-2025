@@ -7,7 +7,7 @@ import {
 } from 'firebase/firestore';
 import { format } from 'date-fns';
 import './CSS/ChatDashboard.css';
-import './CSS/ChatPage.css'
+import './CSS/ChatPage.css';
 import ProfilePopup from './ProfilePopUp';
 
 const UPLOADCARE_PUBLIC_KEY = "1c6044eae7f09b3a5c87";
@@ -26,12 +26,14 @@ export default function ChatWindow() {
   const currentUser = auth.currentUser;
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState('');
+  const [editingMsgId, setEditingMsgId] = useState<string | null>(null);
   const [receiverName, setReceiverName] = useState('');
   const [chatDoc, setChatDoc] = useState<any>(null);
   const [receiverId, setReceiverId] = useState('');
   const bottomRef = useRef<HTMLDivElement | null>(null);
-  const [activeProfile, setActiveProfile] = useState<ProfileData | null>(null); 
-
+  const [activeProfile, setActiveProfile] = useState<ProfileData | null>(null);
+  const [dropdownOpenId, setDropdownOpenId] = useState<string | null>(null);
+  
   useEffect(() => {
     if (!chatId || !currentUser) return;
 
@@ -48,7 +50,6 @@ export default function ChatWindow() {
         const userSnap = await getDoc(doc(db, 'users', otherId));
         setReceiverName(userSnap.data()?.displayName || 'Unknown');
 
-        // Mark as read
         await updateDoc(doc(db, 'chats', chatId), {
           [`lastRead.${currentUser.uid}`]: serverTimestamp()
         });
@@ -64,7 +65,6 @@ export default function ChatWindow() {
       const msgs = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       setMessages(msgs);
 
-      // Mark as read on new message
       updateDoc(doc(db, 'chats', chatId), {
         [`lastRead.${currentUser.uid}`]: serverTimestamp()
       });
@@ -78,11 +78,17 @@ export default function ChatWindow() {
   const sendMessage = async () => {
     if (input.trim() === '' || !currentUser) return;
 
-    await addDoc(collection(db, 'chats', chatId!, 'messages'), {
-      text: input,
-      senderId: currentUser.uid,
-      timestamp: serverTimestamp(),
-    });
+    if (editingMsgId) {
+      const msgRef = doc(db, 'chats', chatId!, 'messages', editingMsgId);
+      await updateDoc(msgRef, { text: input });
+      setEditingMsgId(null);
+    } else {
+      await addDoc(collection(db, 'chats', chatId!, 'messages'), {
+        text: input,
+        senderId: currentUser.uid,
+        timestamp: serverTimestamp(),
+      });
+    }
 
     await updateDoc(doc(db, 'chats', chatId!), {
       lastSenderId: currentUser.uid,
@@ -93,62 +99,75 @@ export default function ChatWindow() {
     setInput('');
   };
 
-  const handleViewProfile = async (userId: string) => {
-      const docSnap = await getDoc(doc(db, 'users', userId));
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setActiveProfile({
-          displayName: data.displayName,
-          photoURL: data.photoURL,
-          age: data.age,
-          dorm: data.dorm,
-          preferences: data.preferences,
-          allergies: data.allergies,
-        });
-      }
-    };
+  const handleEdit = (msgId: string, text: string) => {
+    setEditingMsgId(msgId);
+    setInput(text);
+    setDropdownOpenId(null);
+  };
+
+  const handleDelete = async (msgId: string) => {
+    await updateDoc(doc(db, 'chats', chatId!, 'messages', msgId), {
+      text: '[deleted]'
+    });
+    setDropdownOpenId(null);
+  };
 
   const handleImageUpload = async (file: File) => {
-  const formData = new FormData();
-  formData.append("UPLOADCARE_PUB_KEY", UPLOADCARE_PUBLIC_KEY);
-  formData.append("file", file);
+    const formData = new FormData();
+    formData.append("UPLOADCARE_PUB_KEY", UPLOADCARE_PUBLIC_KEY);
+    formData.append("file", file);
 
-  const res = await fetch("https://upload.uploadcare.com/base/", {
-    method: "POST",
-    body: formData,
-  });
-
-  const data = await res.json();
-  if (data && data.file) {
-    const cdnUrl = `https://ucarecdn.com/${data.file}/`;
-    await addDoc(collection(db, 'chats', chatId!, 'messages'), {
-      imageUrl: cdnUrl,
-      senderId: currentUser?.uid,
-      timestamp: serverTimestamp(),
+    const res = await fetch("https://upload.uploadcare.com/base/", {
+      method: "POST",
+      body: formData,
     });
 
-    await updateDoc(doc(db, 'chats', chatId!), {
-      lastSenderId: currentUser?.uid,
-      [`readBy.${currentUser?.uid}`]: true,
-      [`readBy.${receiverId}`]: false,
-    });
-  } else {
-    alert("❌ Failed to upload image.");
-  }
-};
+    const data = await res.json();
+    if (data && data.file) {
+      const cdnUrl = `https://ucarecdn.com/${data.file}/`;
+      await addDoc(collection(db, 'chats', chatId!, 'messages'), {
+        imageUrl: cdnUrl,
+        senderId: currentUser?.uid,
+        timestamp: serverTimestamp(),
+      });
 
+      await updateDoc(doc(db, 'chats', chatId!), {
+        lastSenderId: currentUser?.uid,
+        [`readBy.${currentUser?.uid}`]: true,
+        [`readBy.${receiverId}`]: false,
+      });
+    } else {
+      alert("❌ Failed to upload image.");
+    }
+  };
+
+  const handleViewProfile = async (userId: string) => {
+    const docSnap = await getDoc(doc(db, 'users', userId));
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      setActiveProfile({
+        displayName: data.displayName,
+        photoURL: data.photoURL,
+        age: data.age,
+        dorm: data.dorm,
+        preferences: data.preferences,
+        allergies: data.allergies,
+      });
+    }
+  };
 
   return (
     <div className="chatWindow">
-      <h3 className="chatWithTitle">{ 'Chat With '}
+      <h3 className="chatWithTitle">
+        Chat With{' '}
         <div className="tooltipWrapper">
-        <span
-          className="tooltipTarget"
-          onClick={() => handleViewProfile(receiverId)}
-        >
-          {receiverName}
-        </span>
-        <div className="customTooltip">View Profile</div>
+          <span
+            className="tooltipTarget"
+            onClick={() => handleViewProfile(receiverId)}
+          >
+            {receiverName}
+          </span>
+          <div className="customTooltip">View Profile</div>
         </div>
       </h3>
       <div className="messages">
@@ -157,30 +176,45 @@ export default function ChatWindow() {
           const formattedTime = msg.timestamp?.toDate
             ? format(msg.timestamp.toDate(), 'dd MMM yyyy • HH:mm')
             : '';
-
-          // Seen/Sent logic
           let messageStatus = '';
           if (isCurrentUser && chatDoc?.lastRead?.[receiverId]) {
             const seenTime = chatDoc.lastRead[receiverId].toMillis?.();
             const msgTime = msg.timestamp?.toMillis?.();
             messageStatus = seenTime >= msgTime ? 'Seen' : 'Delivered';
           }
-          
+
+          const isEditable = !!msg.text && !msg.imageUrl;
+
 
           return (
             <div
               key={msg.id}
-              className={`messageBubble ${isCurrentUser ? 'sent' : 'received'}`}
+              className={`messageRow ${isCurrentUser ? 'sentRow' : 'receivedRow'}`}
             >
-              <div className="messageMeta">
-                <span className="senderName">{isCurrentUser ? 'You' : receiverName}</span>
-                <span className="timestamp">{formattedTime}</span>
+              <div className={`messageBubble ${isCurrentUser ? 'sent' : 'received'}`}>
+                <div className="messageMeta">
+                  <span className="senderName">{isCurrentUser ? 'You' : receiverName}</span>
+                  <span className="timestamp">{formattedTime}</span>
+                </div>
+                <p>{msg.text}</p>
+                {msg.imageUrl && (
+                  <img src={msg.imageUrl} alt="sent-img" className="sentImage" />
+                )}
+                {isCurrentUser && <span className="messageStatus">{messageStatus}</span>}
               </div>
-              <p>{msg.text}</p>
-              {msg.imageUrl && (
-                <img src={msg.imageUrl} alt="sent-img" className="sentImage" />
+              {isCurrentUser && isEditable && (
+                <div className="contextMenuContainer">
+                  <span onClick={() => setDropdownOpenId(msg.id === dropdownOpenId ? null : msg.id)}>
+                    ⋮
+                  </span>
+                  {dropdownOpenId === msg.id && (
+                    <div className="contextMenu">
+                      <button onClick={() => handleEdit(msg.id, msg.text)}>Edit</button>
+                      <button onClick={() => handleDelete(msg.id)}>Delete</button>
+                    </div>
+                  )}
+                </div>
               )}
-              {isCurrentUser && <span className="messageStatus">{messageStatus}</span>}
             </div>
           );
         })}
@@ -194,30 +228,38 @@ export default function ChatWindow() {
           placeholder="Type a message..."
         />
         <label className="attachmentIcon">
-        📎
-        <input
-          type="file"
-          accept="image/*"
-          style={{ display: 'none' }}
-          onChange={e => {
-            const file = e.target.files?.[0];
-            if (file) handleImageUpload(file);
-          }}
-        />
-      </label>
-        <button onClick={sendMessage}>Send</button>
+          📎
+          <input
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={e => {
+              const file = e.target.files?.[0];
+              if (file) handleImageUpload(file);
+            }}
+          />
+        </label>
+        <button onClick={sendMessage}>{editingMsgId ? 'Save' : 'Send'}</button>
+        {editingMsgId && (
+          <div className="editBanner">
+            <button onClick={() => {
+              setEditingMsgId(null);
+              setInput('');
+            }}>Cancel</button>
+          </div>
+        )}
       </div>
 
       {activeProfile && (
-      <ProfilePopup
-        profile={activeProfile}
-        onClose={() => setActiveProfile(null)}
-      />
+        <ProfilePopup
+          profile={activeProfile}
+          onClose={() => setActiveProfile(null)}
+        />
       )}
-
     </div>
   );
 }
+
 
 
 
