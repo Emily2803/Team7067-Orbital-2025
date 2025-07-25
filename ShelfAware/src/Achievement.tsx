@@ -1,14 +1,23 @@
 import { useEffect, useState, useMemo } from "react";
 import { db, auth } from "./firebase";
-import { doc, setDoc, collection, getDocs, where, query, onSnapshot } from "firebase/firestore";
-import { format, subDays, isSameDay } from "date-fns";
+import { doc, setDoc, collection, getDocs, where, query, onSnapshot, getDoc } from "firebase/firestore";
+import { format, subDays } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import "./CSS/Achievement.css";
 import Footer from "./Footer";
 import Confetti from 'react-confetti';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ProfilePopup from "./ProfilePopUp";
 
+interface ProfileData {
+  displayName: string;
+  photoURL?: string;
+  age?: string;
+  dorm?: string;
+  preferences?: string;
+  allergies?: string;
+}
 
 const Achievements = () => {
   const [ userId, setUserId ] = useState<string | null>(null);
@@ -22,6 +31,7 @@ const Achievements = () => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [claimedBadges, setClaimedBadges] = useState<string[]>([]);
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
+  const [activeProfile, setActiveProfile] = useState<ProfileData | null>(null);
 
 
   useEffect(() => {
@@ -118,7 +128,7 @@ const Achievements = () => {
         name: "Waste Saver",
         image: "/badges/WasteSaver.png",
         unlocked: usedUp >= 1,
-        description: "Consume 1 items before they expire!",
+        description: "Consume 1 items in your pantry!",
         progress: usedUp,
         require: 1
       },
@@ -126,7 +136,7 @@ const Achievements = () => {
         name: "Waste Warrior",
         image: "/badges/WeeklyWarrior.png",
         unlocked: usedUp >= 5,
-        description: "Consume 5 items before they expire!",
+        description: "Consume 5 items in your pantry!",
         progress: usedUp,
         require: 5
       },
@@ -134,7 +144,7 @@ const Achievements = () => {
         name: "Waste Vanisher",
         image: "/badges/WasteVanisher.png",
         unlocked: usedUp >= 10,
-        description: "Consume 10 items before they expire!",
+        description: "Consume 10 items in your pantry!",
         progress: usedUp,
         require: 10
       },
@@ -285,6 +295,21 @@ useEffect(() => {
   fetchLeaderboard();
 }, []);
 
+const handleViewProfile = async (userId: string) => {
+    const docSnap = await getDoc(doc(db, 'users', userId));
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      setActiveProfile({
+        displayName: data.displayName,
+        photoURL: data.photoURL,
+        age: data.age,
+        dorm: data.dorm,
+        preferences: data.preferences,
+        allergies: data.allergies,
+      });
+    }
+  };
+
   return (
     <div className="mainwrapper">
     <div className="contentWrapper">
@@ -344,7 +369,12 @@ useEffect(() => {
           </div>
         </div>
       )}
+
       <h2 className="leaderboard-title">🏅 Top 5 Badge Collectors</h2>
+      <p className="leaderboard-subtitle">
+        These champions lead the fight against food waste 🥦🎖️
+      </p>
+      <div className="leaderboard-container">
       <div className="leaderboard">
         {leaderboard.map((user, index) => (
           <div key={user.userId} className="leaderboard-item">
@@ -356,13 +386,29 @@ useEffect(() => {
                 {user.displayName.charAt(0).toUpperCase()}
               </div>
             )}
-            <span className="name">{user.displayName}</span>
+              <div className="tooltipWrapper">
+              <span
+                className="name"
+                onClick={() => handleViewProfile(user.userId)}
+              >
+                {user.displayName}
+              </span>
+              <div className="customTooltip">View Profile</div>
+              </div>
+              
             <span className="count">{user.unlockedCount} Badges</span>
           </div>
         ))}
+        </div>
       </div>
     {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
       <ToastContainer />
+      {activeProfile && (
+        <ProfilePopup
+          profile={activeProfile}
+          onClose={() => setActiveProfile(null)}
+        />
+      )}
     </div>
     <Footer />
     </div>
