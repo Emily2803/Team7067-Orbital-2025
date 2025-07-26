@@ -4,6 +4,7 @@
   "description": "Level of Achievement -- Apollo 11",
   "main": "index.js",
   "dependencies": {
+    "@google-cloud/vision": "^5.3.2",
     "abort-controller": "^3.0.0",
     "accepts": "^1.3.8",
     "acorn": "^8.14.1",
@@ -486,6 +487,7 @@
     "temp-dir": "^2.0.0",
     "terminal-link": "^2.1.1",
     "terser": "^5.39.2",
+    "tesseract.js": "^6.0.1",
     "test-exclude": "^6.0.0",
     "thenify": "^3.3.1",
     "thenify-all": "^1.6.0",

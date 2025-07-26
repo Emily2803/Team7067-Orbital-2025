@@ -15,6 +15,7 @@ import {
 } from "firebase/firestore";
 import "./PantryPage.css";
 import Footer from "../../Footer";
+import Tesseract from 'tesseract.js'; 
 
 interface PantryItem {
   id: string;
@@ -35,6 +36,11 @@ export default function PantryPage() {
   const [remark, setRemark] = useState("");
   const [items, setItems] = useState<PantryItem[]>([]);
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    expiryDate: ""
+  });
+
 
   useEffect(() => {
     let stopPantry: () => void = () => {};
@@ -188,6 +194,143 @@ export default function PantryPage() {
     setExpiryDates(updated);
   };
 
+
+type FormDataType = {
+  name: string;
+  expiryDate: string;
+};
+
+const handleOCRScan = async (
+  e: React.ChangeEvent<HTMLInputElement>,
+  field: 'name' | 'expiry'
+) => {
+  const apiKey = 'AIzaSyAa7nX3CxpcdXunL9IYIIChPLAhU9itrc8';
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  try {
+    const rawText: string = await detectText(file, apiKey);
+    console.log(`Raw OCR Text:`, rawText);
+
+    if (field === 'name') {
+      const lines = rawText
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line =>
+          /^[A-Za-z0-9\s\-]+$/.test(line) &&           // no weird symbols
+          line.length >= 3 &&
+          line.length <= 30 &&
+          !line.toLowerCase().includes("exp") &&
+          !line.toLowerCase().includes("mfg") &&
+          !line.toLowerCase().includes("best") &&
+          !line.toLowerCase().includes("lot") &&
+          !line.toLowerCase().includes("reg") &&
+          !line.toLowerCase().includes("getty") &&
+          !line.toLowerCase().includes("dreamstime")
+        );
+
+      const mostReadable = lines[0] || '';
+      if (mostReadable) {
+        setName(mostReadable);
+      } else {
+        alert("Couldn’t detect food name. Try clearer image without clutter.");
+      }
+
+    } else if (field === 'expiry') {
+      // Try ALL date-like patterns, not just one
+      const allMatches = [...rawText.matchAll(/\d{2,4}[\/\-\.\s]?\d{2}[\/\-\.\s]?\d{2,4}/g)];
+
+      for (const match of allMatches) {
+        const raw = match[0].replace(/\s/g, '');
+        const formatted = formatToISO(raw);
+        if (formatted && !isNaN(new Date(formatted).getTime())) {
+          setExpiryDates([formatted]);
+          e.target.value = ''; // reset input for re-use
+          return;
+        }
+      }
+
+      alert("Couldn’t parse any valid expiry date. Try better lighting or clearer text.");
+    }
+  } catch (err) {
+    console.error("OCR Error:", err);
+    alert("Something went wrong during OCR.");
+  }
+
+  // Allow re-uploading same file again
+  e.target.value = '';
+};
+
+
+
+
+
+
+
+
+function formatToISO(dateStr: string): string {
+  const parts = dateStr.split(/[\/\-\.\s]/);
+  if (parts.length !== 3) return "";
+
+  let [a, b, c] = parts;
+
+  // Ensure numbers
+  if (!/^\d+$/.test(a) || !/^\d+$/.test(b) || !/^\d+$/.test(c)) return "";
+
+  // Expand 2-digit year
+  if (c.length === 2) c = "20" + c;
+
+  // Try DD/MM/YYYY (if day <= 31 and month <= 12)
+  const d1 = Number(a), m1 = Number(b);
+  if (d1 <= 31 && m1 <= 12) {
+    return `${c}-${m1.toString().padStart(2, '0')}-${d1.toString().padStart(2, '0')}`;
+  }
+
+  // Try MM/DD/YYYY (if month <= 12 and day <= 31)
+  const d2 = Number(b), m2 = Number(a);
+  if (d2 <= 31 && m2 <= 12) {
+    return `${c}-${m2.toString().padStart(2, '0')}-${d2.toString().padStart(2, '0')}`;
+  }
+
+  return "";
+}
+
+
+function toBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve((reader.result as string).split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function detectText(file: File, apiKey: string) {
+  const base64 = await toBase64(file);
+  const response = await fetch(
+    `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        requests: [
+          {
+            image: { content: base64 },
+            features: [{ type: 'TEXT_DETECTION' }]
+          }
+        ]
+      })
+    }
+  );
+
+  const result = await response.json();
+  const text = result.responses?.[0]?.fullTextAnnotation?.text || '';
+  return text;
+}
+
+
+
+
   return (
     <div className="pantryPage">
       <div className="pantryContent">
@@ -224,7 +367,30 @@ export default function PantryPage() {
 
                 <label>Remarks / Notes</label>
                 <textarea placeholder="Optional comments or storage info" value={remark} onChange={(e) => setRemark(e.target.value)} />
+                
+                <label>Fill up with OCR</label>
+                <div className="scanButtons">
+                <button
+                  type="button"
+                  className="scanBtn"
+                  onClick={() => document.getElementById("scanName")?.click()}
+                  title="Scans only clear printed labels like 'OREO' or 'Bread' — works best with centered, bold text"
+                >
+                  📸 Scan Food Name
+                </button>
 
+                <button
+                  type="button"
+                  className="scanBtn"
+                  onClick={() => document.getElementById("scanExpiry")?.click()}
+                  title="Scans expiry labels like 'EXP: 2025-08-10' — only works if text is printed clearly with good contrast"
+                >
+                  📆 Scan Expiry Date
+                </button>
+
+                <input type="file" id="scanName" accept="image/*" style={{ display: "none" }} onChange={(e) => handleOCRScan(e, "name")} />
+                <input type="file" id="scanExpiry" accept="image/*" style={{ display: "none" }} onChange={(e) => handleOCRScan(e, "expiry")} />
+              </div>
                 <div className="popupButtons">
                   <button type="submit">{editingItem ? "Update" : "Save"}</button>
                   <button type="button" onClick={resetForm}>Cancel</button>

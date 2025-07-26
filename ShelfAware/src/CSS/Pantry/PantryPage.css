@@ -399,8 +399,31 @@ body {
   50% { transform: scale(1.05); opacity: 0.85; }
 }
 
+.scanBtn {
+  background-color: white;
+  border: 1.5px solid #2e7d32;
+  color: #2e7d32;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  margin-right: 1rem;
+  white-space: nowrap;
+  
+}
 
+.scanBtn:hover {
+  background-color: #2e7d32;
+  color: white;
+}
 
+.scanButtons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
 
 
 
