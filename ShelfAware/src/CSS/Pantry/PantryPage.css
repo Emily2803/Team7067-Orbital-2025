@@ -364,7 +364,7 @@ body {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .popupButtons button {
@@ -410,7 +410,6 @@ body {
   transition: all 0.2s ease;
   margin-right: 1rem;
   white-space: nowrap;
-  
 }
 
 .scanBtn:hover {

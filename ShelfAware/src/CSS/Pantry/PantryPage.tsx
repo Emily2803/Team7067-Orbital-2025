@@ -15,7 +15,6 @@ import {
 } from "firebase/firestore";
 import "./PantryPage.css";
 import Footer from "../../Footer";
-import Tesseract from 'tesseract.js'; 
 
 interface PantryItem {
   id: string;
