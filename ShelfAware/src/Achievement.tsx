@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { db, auth } from "./firebase";
 import { doc, setDoc, collection, getDocs, where, query, onSnapshot, getDoc } from "firebase/firestore";
 import { format, subDays } from "date-fns";
@@ -112,7 +112,7 @@ const Achievements = () => {
         name: "Pantry Builder",
         image: "/badges/PantryBuilder.png",
         unlocked: addedCount >= 5,
-        description: "Log 5 or more items to your pantry!",
+        description: "Log 5 items to your pantry!",
         progress: addedCount,
         require: 5
       },
@@ -120,7 +120,7 @@ const Achievements = () => {
         name: "Pantry Chef",
         image: "/badges/PantryChef.png",
         unlocked: addedCount >= 10,
-        description: "Log 10 items before they expire!",
+        description: "Log 10 items to your pantry!",
         progress: addedCount,
         require: 10
       },
@@ -128,7 +128,7 @@ const Achievements = () => {
         name: "Waste Saver",
         image: "/badges/WasteSaver.png",
         unlocked: usedUp >= 1,
-        description: "Consume 1 items in your pantry!",
+        description: "Consume 1 items from your pantry!",
         progress: usedUp,
         require: 1
       },
@@ -136,7 +136,7 @@ const Achievements = () => {
         name: "Waste Warrior",
         image: "/badges/WeeklyWarrior.png",
         unlocked: usedUp >= 5,
-        description: "Consume 5 items in your pantry!",
+        description: "Consume 5 items from your pantry!",
         progress: usedUp,
         require: 5
       },
@@ -184,7 +184,7 @@ const Achievements = () => {
         name: "Pantry King",
         image: "/badges/PantryKing.png",
         unlocked: addedCount >= 100,
-        description: "Add 100 items to your pantry!",
+        description: "Log 100 items to your pantry!",
         progress: addedCount,
         require: 100
       },
@@ -402,7 +402,7 @@ const handleViewProfile = async (userId: string) => {
         </div>
       </div>
     {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
-      <ToastContainer />
+      <ToastContainer aria-label="toast notifications" />
       {activeProfile && (
         <ProfilePopup
           profile={activeProfile}
