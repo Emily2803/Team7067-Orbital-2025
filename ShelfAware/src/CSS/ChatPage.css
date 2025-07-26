@@ -2,6 +2,7 @@
   padding: 2rem;
   background-color: #f9fdfb;
   font-family: 'Outfit', sans-serif;
+  min-height: 78vh;
 }
 
 .chatBackBtns {
