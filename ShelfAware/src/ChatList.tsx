@@ -43,17 +43,25 @@ export default function ChatList() {
 
       for (const chatDoc of querySnapshot.docs) {
         const chatData = chatDoc.data();
+
+        if (!chatData ||
+          !Array.isArray(chatData.users) ||
+          chatData.users.length !== 2
+        ) {
+          continue;
+        }
+
+        const otherId = chatData.users.find((id: string) => id !== currentUser.uid);
+        if (!otherId) continue;
+
         const messagesRef = collection(db, 'chats', chatDoc.id, 'messages');
         const latestMsgQuery = query(messagesRef, orderBy('timestamp', 'desc'), limit(1));
         const latestMsgSnap = await getDocs(latestMsgQuery);
 
         if (!latestMsgSnap.empty) {
           const lastTimestamp = latestMsgSnap.docs[0].data().timestamp;
-
-          const otherId = chatData.users.find((id: string) => id !== currentUser.uid);
           const userSnap = await getDoc(doc(db, 'users', otherId));
 
-          // Count unread messages sent by other user
           const unreadQuery = query(
             messagesRef,
             where('senderId', '==', otherId),
