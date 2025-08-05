@@ -120,20 +120,6 @@ exports.sendExpiryEmails = onSchedule(
         return null;
     });
 
-    // JUST FOR MANUAL TESTING ** WILL DELETE THIS
-exports.testExpiryEmails = onRequest(
-  { secrets: [RESEND_API_KEY] }, // ✅ Add this line
-  async (req, res) => {
-    try {
-      await exports.sendExpiryEmails.run();
-      res.send("✅ Manually triggered expiry email job.");
-    } catch (err) {
-      console.error("❌ Error running expiry function:", err);
-      res.status(500).send("Something went wrong.");
-    }
-  }
-);
-
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 
