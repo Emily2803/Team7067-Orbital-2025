@@ -578,6 +578,7 @@
     "fsevents": "0.0.0"
   },
   "devDependencies": {
-    "@craco/craco": "^7.1.0"
+    "@craco/craco": "^7.1.0",
+    "@types/date-fns": "^2.6.3"
   }
 }
